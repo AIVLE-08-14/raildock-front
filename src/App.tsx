@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import reactLogo from './assets/icons/react.svg'
 import viteLogo from '/vite.svg'
+import KakaoMap from './components/KakaoMap';
 
 function App() {
   const [count, setCount] = useState(0)
@@ -37,7 +38,7 @@ function App() {
       </h1>
 
       {/* 카드 영역 */}
-      <div className="bg-white rounded-xl shadow-md p-6 flex flex-col items-center gap-4">
+      <div className="bg-white rounded-xl shadow-md p-6 flex flex-col items-center gap-4 w-full max-w-2xl">
         <button
           onClick={() => setCount(count + 1)}
           className="px-5 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
@@ -52,6 +53,13 @@ function App() {
           </code>{' '}
           and save to test HMR
         </p>
+      </div>
+
+      <div className="w-full max-w-4xl rounded-xl shadow-md overflow-hidden bg-white">
+        <div className="px-4 py-2 font-semibold text-gray-700">
+          카카오 지도
+        </div>
+        <KakaoMap lat={37.3595704} lng={127.1052062} level={4} />
       </div>
 
       {/* 하단 설명 */}
