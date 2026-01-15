@@ -5,16 +5,16 @@ import DefectAlerts from "@/components/reports/DefectAlerts"
 
 export default function Home() {
   return (
-    <div className="flex gap-4 h-[calc(100vh-160px)]">
+    <div className="flex gap-4 h-[calc(100vh-57px)]">
       {/* 좌측 리포트 */}
-      <aside className="w-150 flex flex-col gap-4 overflow-y-auto">
+      <aside className="w-150 flex flex-col gap-4 overflow-y-auto pt-4 pb-4">
         <DefectSummary />
         <DefectTrend />
         <DefectAlerts />
       </aside>
 
       {/* 우측 지도 */}
-      <div className="flex-1 rounded-xl shadow-md overflow-hidden bg-white">
+      <div className="flex-1 rounded-xl shadow-md overflow-hidden bg-white pt-4 pb-4">
         <div className="px-4 py-2 font-semibold text-gray-700">
           카카오 지도
         </div>
