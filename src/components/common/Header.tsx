@@ -1,5 +1,6 @@
 import { Link, useLocation } from "react-router-dom"
 import { Button } from "@/components/ui/button"
+import logo from "@/assets/icons/logo.svg"
 
 export default function Header() {
   const { pathname } = useLocation()
@@ -10,8 +11,10 @@ export default function Header() {
   return (
     <header className="border-b bg-white">
       <div className="w-full px-6 py-3 flex items-center gap-2">
+        
         {/* 로고 */}
         <Link to="/" className="text-lg font-bold mr-6">
+          <img src={logo} alt="Rail-Dock Logo" className="w-[2.5em] h-[2.5em] object-contain inline"/>
           Raildock
         </Link>
 
