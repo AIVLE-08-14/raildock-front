@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { KOREA_POINTS } from "./points";
 
 /* =========================
-   Kakao Map Script Loader
+  Kakao Map Script Loader
 ========================= */
 
 declare global {
@@ -67,7 +67,7 @@ function createDotMarker(lat: number, lng: number, color = "red") {
 }
 
 /* =========================
-   Hover Info
+  Hover Info
 ========================= */
 
 function attachHoverInfo(marker: any, defect: any) {
@@ -105,7 +105,7 @@ interface KakaoMapProps {
 }
 
 /* =========================
-   Component
+  Component
 ========================= */
 
 export default function KakaoMap({
@@ -121,7 +121,7 @@ export default function KakaoMap({
   const [error, setError] = useState<string | null>(null);
 
   /* =========================
-     Script Load
+    Script Load
   ========================= */
 
   useEffect(() => {
@@ -138,7 +138,7 @@ export default function KakaoMap({
   }, []);
 
   /* =========================
-     Map Init + Clusterer
+    Map Init + Clusterer
   ========================= */
 
   useEffect(() => {
@@ -174,7 +174,7 @@ export default function KakaoMap({
   }, [ready]);
 
   /* =========================
-     Update Center / Level
+    Update Center / Level
   ========================= */
 
   useEffect(() => {
@@ -187,7 +187,7 @@ export default function KakaoMap({
   }, [lat, lng, level]);
 
   /* =========================
-     Cleanup
+    Cleanup
   ========================= */
 
   useEffect(() => {
@@ -199,7 +199,7 @@ export default function KakaoMap({
   }, []);
 
   /* =========================
-     Render
+    Render
   ========================= */
 
   if (error) {
