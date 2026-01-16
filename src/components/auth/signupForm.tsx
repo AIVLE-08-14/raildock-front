@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import SecretInput from '../common/SecretInput'
+import { formatPhoneNumber } from '@/utils/formatPhoneNumber'
 
 interface Props {
   onSwitch: () => void
@@ -79,7 +80,7 @@ export default function SignupForm({ onSwitch }: Props) {
       {/* 전화번호 */}
       <div className="space-y-1 md:space-y-0.5">
         <div className="text-sm md:text-xs font-semibold">전화번호</div>
-        <Input className="h-11 md:h-10 lg:h-9" placeholder="010-0000-0000" value={phone} onChange={(e) => setPhone(e.target.value)} />
+        <Input className="h-11 md:h-10 lg:h-9" placeholder="010-0000-0000" value={phone} onChange={(e) => setPhone(formatPhoneNumber(e.target.value))} />
       </div>
 
       {/* 이메일 */}
