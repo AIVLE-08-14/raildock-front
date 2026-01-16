@@ -6,16 +6,18 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-
 import imgLoginVisual from '@/assets/images/LoginImage.png'
 import logo from '@/assets/icons/logo.svg'
 import LoginForm from '@/components/auth/loginForm'
 import SignupForm from '@/components/auth/signupForm'
+import AgreementModal from './../components/auth/AgreementModal';
 
 type AuthMode = 'login' | 'signup'
 
 export default function Auth() {
   const [authMode, setAuthMode] = useState<AuthMode>('login')
+  const [openTerms, setOpenTerms] = useState(false)
+  const [openPrivacy, setOpenPrivacy] = useState(false)
 
   return (
     <div className="min-h-screen relative bg-slate-100 md:bg-transparent">
@@ -42,7 +44,6 @@ export default function Auth() {
             w-full
             md:w-[60%]
             lg:w-[38%]
-            max-w-none
             rounded-2xl
             shadow-2xl
             bg-white/90
@@ -67,13 +68,32 @@ export default function Auth() {
           {/* 카드 내부 콘텐츠 */}
           <CardContent>
             {authMode === 'login' ? (
-              <LoginForm onSwitch={() => setAuthMode('signup')} />
+              <LoginForm 
+                onSwitch={() => setAuthMode('signup')}
+                onOpenTerms={() => setOpenTerms(true)} 
+                onOpenPrivacy={() => setOpenPrivacy(true)}  
+              />
             ) : (
-              <SignupForm onSwitch={() => setAuthMode('login')} />
+              <SignupForm
+                onSwitch={() => setAuthMode('login')}
+                onOpenTerms={() => setOpenTerms(true)}
+                onOpenPrivacy={() => setOpenPrivacy(true)}
+              />
             )}
           </CardContent>
         </Card>
       </div>
+      <AgreementModal
+        open={openTerms}
+        onClose={() => setOpenTerms(false)}
+        mdPath="/src/assets/contents/terms.md"
+      />
+
+      <AgreementModal
+        open={openPrivacy}
+        onClose={() => setOpenPrivacy(false)}
+        mdPath="/src/assets/contents/policy.md"
+      />
     </div>
   )
 }

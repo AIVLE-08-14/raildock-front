@@ -1,17 +1,18 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import Footer from '../Footer'
 import SecretInput from '../common/SecretInput'
 
 interface Props {
   onSwitch: () => void
+  onOpenTerms: () => void
+  onOpenPrivacy: () => void
 }
 
-export default function LoginForm({ onSwitch }: Props) {
+export default function LoginForm({ onSwitch, onOpenTerms, onOpenPrivacy }: Props) {
   const [employeeId, setEmployeeId] = useState('')
   const [password, setPassword] = useState('')
-
+    
   const handleLogin = () => {
     if (!employeeId || !password) {
       alert('사원번호와 비밀번호를 입력하세요.')
@@ -66,10 +67,30 @@ export default function LoginForm({ onSwitch }: Props) {
         </button>
       </div>
 
-      {/* Footer */}
-      <div className="pt-2 md:pt-1">
-        <Footer />
-      </div>
+        <div className="pt-2 md:pt-1">
+            <footer className="mt-8 text-center text-sm text-muted-foreground">
+                <div className="flex justify-center gap-4 mb-2">
+                <button
+                    type="button"
+                    onClick={onOpenPrivacy}
+                    className="hover:underline"
+                >
+                    개인정보 처리방침
+                </button>
+                <button
+                    type="button"
+                    onClick={onOpenTerms}
+                    className="hover:underline"
+                >
+                    이용약관
+                </button>
+                </div>
+                <p className="text-xs">
+                contact: temp-support@example.com
+                </p>
+            </footer>
+        </div>
+
     </div>
   )
 }

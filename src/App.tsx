@@ -13,7 +13,6 @@ function App() {
   return (
     <Routes>
       {/* 레이아웃 없는 페이지 */}
-      Auth
       <Route path="/login" element={<Auth />} />
 
       {/* 레이아웃 적용 영역 */}

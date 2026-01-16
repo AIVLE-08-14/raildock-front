@@ -8,9 +8,11 @@ import { Checkbox } from '../ui/checkbox'
 
 interface Props {
   onSwitch: () => void
+  onOpenTerms: () => void
+  onOpenPrivacy: () => void
 }
 
-export default function SignupForm({ onSwitch }: Props) {
+export default function SignupForm({ onSwitch, onOpenTerms, onOpenPrivacy }: Props) {
   const [employeeId, setEmployeeId] = useState('')
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
@@ -122,30 +124,46 @@ export default function SignupForm({ onSwitch }: Props) {
       </div>
 
       {/* 이용약관 동의 */}
-      <div className="flex items-start gap-2 pt-1">
+        <div className="flex items-start gap-2 pt-1">
         <Checkbox
             id="agree-terms"
             checked={agreeTerms}
             onCheckedChange={(checked) => setAgreeTerms(checked === true)}
             className="mt-0.5"
         />
-        <label htmlFor="agree-terms" className="text-xs text-slate-600">
-          이용약관에 동의합니다. (필수)
+        <label htmlFor="agree-terms" className="text-xs text-slate-600 leading-relaxed">
+            <button
+            type="button"
+            onClick={onOpenTerms}
+            className="underline hover:text-slate-800 font-bold"
+            >
+            이용약관
+            </button>
+            에 동의합니다. (필수)
         </label>
-      </div>
+        </div>
+
 
       {/* 개인정보 수집·이용 동의 */}
-      <div className="flex items-start gap-2 pt-1">
-        <Checkbox
-            id="agree-privacy"
-            checked={agreePrivacy}
-            onCheckedChange={(checked) => setAgreePrivacy(checked === true)}
-            className="mt-0.5"
-        />
-        <label htmlFor="agree-privacy" className="text-xs text-slate-600">
-          개인정보 수집 및 이용에 동의합니다. (필수)
-        </label>
-      </div>
+<div className="flex items-start gap-2 pt-1">
+  <Checkbox
+    id="agree-privacy"
+    checked={agreePrivacy}
+    onCheckedChange={(checked) => setAgreePrivacy(checked === true)}
+    className="mt-0.5"
+  />
+  <label htmlFor="agree-privacy" className="text-xs text-slate-600 leading-relaxed">
+    <button
+      type="button"
+      onClick={onOpenPrivacy}
+      className="underline hover:text-slate-800 font-bold"
+    >
+      개인정보 수집 및 이용
+    </button>
+    에 동의합니다. (필수)
+  </label>
+</div>
+
 
       {/* 회원가입 버튼 */}
       <Button className="w-full h-11 md:h-10 lg:h-9 text-base md:text-sm font-semibold" disabled={isFormInvalid} onClick={handleSignup}>
