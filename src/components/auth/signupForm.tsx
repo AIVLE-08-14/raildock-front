@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input'
 import SecretInput from '../common/SecretInput'
 import { formatPhoneNumber } from '@/utils/formatPhoneNumber'
 import { validatePassword } from '@/utils/validatePassword'
+import { Checkbox } from '../ui/checkbox'
 
 interface Props {
   onSwitch: () => void
@@ -122,7 +123,12 @@ export default function SignupForm({ onSwitch }: Props) {
 
       {/* 이용약관 동의 */}
       <div className="flex items-start gap-2 pt-1">
-        <input type="checkbox" id="agree-terms" checked={agreeTerms} onChange={(e) => setAgreeTerms(e.target.checked)} className="mt-1" />
+        <Checkbox
+            id="agree-terms"
+            checked={agreeTerms}
+            onCheckedChange={(checked) => setAgreeTerms(checked === true)}
+            className="mt-0.5"
+        />
         <label htmlFor="agree-terms" className="text-xs text-slate-600">
           이용약관에 동의합니다. (필수)
         </label>
@@ -130,7 +136,12 @@ export default function SignupForm({ onSwitch }: Props) {
 
       {/* 개인정보 수집·이용 동의 */}
       <div className="flex items-start gap-2 pt-1">
-        <input type="checkbox" id="agree-privacy" checked={agreePrivacy} onChange={(e) => setAgreePrivacy(e.target.checked)} className="mt-1" />
+        <Checkbox
+            id="agree-privacy"
+            checked={agreePrivacy}
+            onCheckedChange={(checked) => setAgreePrivacy(checked === true)}
+            className="mt-0.5"
+        />
         <label htmlFor="agree-privacy" className="text-xs text-slate-600">
           개인정보 수집 및 이용에 동의합니다. (필수)
         </label>
