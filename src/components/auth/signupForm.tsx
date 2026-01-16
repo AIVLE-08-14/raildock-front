@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import SecretInput from '../common/SecretInput'
 import { formatPhoneNumber } from '@/utils/formatPhoneNumber'
+import { validatePassword } from '@/utils/validatePassword'
 
 interface Props {
   onSwitch: () => void
@@ -18,21 +19,49 @@ export default function SignupForm({ onSwitch }: Props) {
   const [agreeTerms, setAgreeTerms] = useState(false)
   const [agreePrivacy, setAgreePrivacy] = useState(false)
 
-  const isPasswordMismatch =
+  const passwordValidation = validatePassword(password)
+
+  const isPasswordMatch =
     password.length > 0 &&
     passwordConfirm.length > 0 &&
-    password !== passwordConfirm
+    password === passwordConfirm
+
+  // 최종 메시지 결정
+  let passwordMessage: { text: string; color: string } | null = null
+
+  if (passwordConfirm.length > 0 || password.length > 0) {
+    if (passwordValidation.reason === 'EMPTY') {
+      passwordMessage = {
+        text: '비밀번호를 입력해주세요.',
+        color: 'text-red-500',
+      }
+    } else if (passwordValidation.reason === 'FORMAT') {
+      passwordMessage = {
+        text: '비밀번호는 8~20자이며 특수문자를 1개 이상 포함해야 합니다.',
+        color: 'text-red-500',
+      }
+    } else if (!isPasswordMatch) {
+      passwordMessage = {
+        text: '위의 비밀번호와 다릅니다.',
+        color: 'text-red-500',
+      }
+    } else {
+      passwordMessage = {
+        text: '비밀번호 검증 완료',
+        color: 'text-green-600',
+      }
+    }
+  }
 
   const isFormInvalid =
     !employeeId ||
     !name ||
     !phone ||
     !email ||
-    !password ||
-    !passwordConfirm ||
     !agreeTerms ||
     !agreePrivacy ||
-    isPasswordMismatch
+    !passwordValidation.valid ||
+    !isPasswordMatch
 
   const handleSignup = () => {
     if (isFormInvalid) {
@@ -68,7 +97,9 @@ export default function SignupForm({ onSwitch }: Props) {
       <div className="space-y-1 md:space-y-0.5">
         <div className="text-sm md:text-xs font-semibold">비밀번호 확인</div>
         <SecretInput className="h-11 md:h-10 lg:h-9" value={passwordConfirm} onChange={(e) => setPasswordConfirm(e.target.value)} />
-        {isPasswordMismatch && <p className="text-xs text-red-500 mt-0.5">비밀번호가 일치하지 않습니다.</p>}
+        <p className={`text-xs mt-0.5 min-h-[1.25rem] ${passwordMessage ? passwordMessage.color : 'text-transparent'}`}>
+             {passwordMessage ? passwordMessage.text : 'placeholder'}
+        </p>
       </div>
 
       {/* 이름 */}
