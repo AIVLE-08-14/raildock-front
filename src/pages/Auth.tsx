@@ -84,7 +84,7 @@ export default function Auth() {
         </Card>
       </div>
       <AgreementModal
-        open={openTerms}
+        open={openTerms}        
         onClose={() => setOpenTerms(false)}
         mdPath="/src/assets/contents/terms.md"
       />
