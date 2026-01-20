@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import SecretInput from '../common/SecretInput'
+import { useLoginMutation } from '@/api/queries/authQueries'
+import { useNavigate } from 'react-router-dom'
 
 interface Props {
   onSwitch: () => void
@@ -12,6 +14,9 @@ interface Props {
 export default function LoginForm({ onSwitch, onOpenTerms, onOpenPrivacy }: Props) {
   const [employeeId, setEmployeeId] = useState('')
   const [password, setPassword] = useState('')
+  const loginMutation = useLoginMutation()
+  const navigate = useNavigate()
+
     
   const handleLogin = () => {
     if (!employeeId || !password) {
@@ -19,7 +24,17 @@ export default function LoginForm({ onSwitch, onOpenTerms, onOpenPrivacy }: Prop
       return
     }
 
-    console.log('로그인 성공', { employeeId })
+    loginMutation.mutate(
+      { employeeId, password },
+      {
+        onSuccess: () => {
+          navigate('/', { replace: true })
+        },
+        onError: () => {
+          alert('로그인에 실패했습니다.')
+        },
+      }
+    )
   }
 
   return (

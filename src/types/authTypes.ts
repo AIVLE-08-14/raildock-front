@@ -28,7 +28,7 @@ export interface SignupRequest {
     employeeId: string
     password: string
     name: string
-    phone: string
+    phoneNumber: string
     email: string
 }
 

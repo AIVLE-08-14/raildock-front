@@ -3,7 +3,7 @@ import axios, { AxiosError } from 'axios'
 import { queryClient } from '@/api/queries/reactQuery'
 
 export const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,
+  baseURL: import.meta.env.VITE_Backend_URL,
   withCredentials: true, // ⭐ 세션 인증 핵심
   timeout: 10000,        // 10초 타임아웃
   headers: {
