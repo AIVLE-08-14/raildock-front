@@ -8,6 +8,7 @@ import Report from './pages/Report'
 import ReportDetail from './pages/ReportDetail'
 import Document from './pages/Document'
 import DocumentDetail from './pages/DocumentDetail'
+import Test from './pages/test'
 import Auth from './pages/Auth'
 
 function App() {

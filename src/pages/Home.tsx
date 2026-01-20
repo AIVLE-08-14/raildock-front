@@ -1,4 +1,4 @@
-import KakaoMap from "@/components/KakaoMap"
+import TestMap from "@/components/OlMap"
 import DefectSummary from "@/components/reports/DefectSummary"
 import DefectTrend from "@/components/reports/DefectTrend"
 import DefectAlerts from "@/components/reports/DefectAlerts"
@@ -16,9 +16,13 @@ export default function Home() {
       {/* 우측 지도 */}
       <div className="flex-1 rounded-xl shadow-md overflow-hidden bg-white pt-4 pb-4">
         <div className="px-4 py-2 font-semibold text-gray-700">
-          카카오 지도
+          철도 노선 지도
         </div>
-        <KakaoMap lat={37.3595704} lng={127.1052062} level={4} />
+
+        {/* OpenLayers 지도 */}
+        <div className="h-full">
+          <TestMap />
+        </div>
       </div>
     </div>
   )
