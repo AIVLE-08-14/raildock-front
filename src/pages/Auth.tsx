@@ -8,8 +8,8 @@ import {
 } from '@/components/ui/card'
 import imgLoginVisual from '@/assets/images/LoginImage.png'
 import logo from '@/assets/icons/logo.svg'
-import LoginForm from '@/components/auth/loginForm'
-import SignupForm from '@/components/auth/signupForm'
+import LoginForm from '@/components/auth/LoginForm'
+import SignupForm from '@/components/auth/SignupForm'
 import AgreementModal from './../components/auth/AgreementModal';
 
 type AuthMode = 'login' | 'signup'
@@ -84,7 +84,7 @@ export default function Auth() {
         </Card>
       </div>
       <AgreementModal
-        open={openTerms}
+        open={openTerms}        
         onClose={() => setOpenTerms(false)}
         mdPath="/src/assets/contents/terms.md"
       />

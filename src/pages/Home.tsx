@@ -1,4 +1,4 @@
-import TestMap from "@/components/OlMap"
+import TestMap from "@/components/map/OlMap"
 import DefectSummary from "@/components/reports/DefectSummary"
 import DefectTrend from "@/components/reports/DefectTrend"
 import DefectAlerts from "@/components/reports/DefectAlerts"

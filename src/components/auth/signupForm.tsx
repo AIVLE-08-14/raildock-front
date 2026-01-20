@@ -5,6 +5,7 @@ import SecretInput from '../common/SecretInput'
 import { formatPhoneNumber } from '@/utils/formatPhoneNumber'
 import { validatePassword } from '@/utils/validatePassword'
 import { Checkbox } from '../ui/checkbox'
+import { useSignupMutation } from '@/api/queries/authQueries'
 
 interface Props {
   onSwitch: () => void
@@ -15,12 +16,13 @@ interface Props {
 export default function SignupForm({ onSwitch, onOpenTerms, onOpenPrivacy }: Props) {
   const [employeeId, setEmployeeId] = useState('')
   const [name, setName] = useState('')
-  const [phone, setPhone] = useState('')
+  const [phoneNumber, setPhoneNumber] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [passwordConfirm, setPasswordConfirm] = useState('')
   const [agreeTerms, setAgreeTerms] = useState(false)
   const [agreePrivacy, setAgreePrivacy] = useState(false)
+  const signupMutation = useSignupMutation()
 
   const passwordValidation = validatePassword(password)
 
@@ -59,7 +61,7 @@ export default function SignupForm({ onSwitch, onOpenTerms, onOpenPrivacy }: Pro
   const isFormInvalid =
     !employeeId ||
     !name ||
-    !phone ||
+    !phoneNumber ||
     !email ||
     !agreeTerms ||
     !agreePrivacy ||
@@ -72,14 +74,22 @@ export default function SignupForm({ onSwitch, onOpenTerms, onOpenPrivacy }: Pro
       return
     }
 
-    console.log('회원가입 요청', {
-      employeeId,
-      name,
-      phone,
-      email,
-      agreeTerms,
-      agreePrivacy,
-    })
+    // 쿼리 호출
+    signupMutation.mutate(
+      {
+        employeeId,
+        password,
+        name,
+        phoneNumber,
+        email,
+      },
+      {
+        onSuccess: () => {
+          alert('회원가입이 완료되었습니다. 로그인 페이지로 이동합니다.')
+          onSwitch()
+        }
+      }
+    )
   }
 
   return (
@@ -114,7 +124,7 @@ export default function SignupForm({ onSwitch, onOpenTerms, onOpenPrivacy }: Pro
       {/* 전화번호 */}
       <div className="space-y-1 md:space-y-0.5">
         <div className="text-sm md:text-xs font-semibold">전화번호</div>
-        <Input className="h-11 md:h-10 lg:h-9" placeholder="010-0000-0000" value={phone} onChange={(e) => setPhone(formatPhoneNumber(e.target.value))} />
+        <Input className="h-11 md:h-10 lg:h-9" placeholder="010-0000-0000" value={phoneNumber} onChange={(e) => setPhoneNumber(formatPhoneNumber(e.target.value))} />
       </div>
 
       {/* 이메일 */}
