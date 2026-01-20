@@ -7,6 +7,7 @@ import Report from './pages/Report'
 import ReportDetail from './pages/ReportDetail'
 import Document from './pages/Document'
 import DocumentDetail from './pages/DocumentDetail'
+import Test from './pages/test'
 import Auth from './pages/Auth'
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
         <Route path="/reports/:id" element={<ReportDetail />} />
         <Route path="/documents" element={<Document />} />
         <Route path="/documents/:id" element={<DocumentDetail />} />
+        <Route path="/test" element={<Test />} />
       </Route>
     </Routes>
   )
