@@ -13,12 +13,16 @@ export default function Header() {
       <div className="w-full px-6 py-3 flex items-center gap-2">
         
         {/* 로고 */}
-        <Link to="/" className="text-lg font-bold mr-6">
-          <img src={logo} alt="Rail-Dock Logo" className="w-[2.5em] h-[2.5em] object-contain inline"/>
+        <Link to="/" className="text-lg font-bold mr-6 flex items-center gap-2">
+          <img
+            src={logo}
+            alt="Rail-Dock Logo"
+            className="w-[2.5em] h-[2.5em] object-contain"
+          />
           Raildock
         </Link>
 
-        {/* 메인 */}
+        {/* 대시보드 */}
         <Button
           asChild
           size="sm"
@@ -27,13 +31,22 @@ export default function Header() {
           <Link to="/">대시보드</Link>
         </Button>
 
-        {/* 리포트 */}
+        {/* 결함 탐지 */}
+        <Button
+          asChild
+          size="sm"
+          variant={isActive("/defects") ? "default" : "ghost"}
+        >
+          <Link to="/defects">결함 탐지</Link>
+        </Button>
+
+        {/* 결함 정보 */}
         <Button
           asChild
           size="sm"
           variant={isActive("/reports") ? "default" : "ghost"}
         >
-          <Link to="/reports">결함 리포트</Link>
+          <Link to="/reports">결함 정보</Link>
         </Button>
 
         {/* 문서 */}
@@ -50,9 +63,9 @@ export default function Header() {
           <Button
             asChild
             size="sm"
-            variant={isActive("/auth") ? "default" : "outline"}
+            variant={isActive("/login") ? "default" : "outline"}
           >
-            <Link to="/auth">로그인</Link>
+            <Link to="/login">로그인</Link>
           </Button>
         </div>
       </div>

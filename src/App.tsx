@@ -1,8 +1,14 @@
 import { Routes, Route } from 'react-router-dom'
 
 import Layout from './components/common/Layout'
+import DefectLayout from './components/common/DefectLayout'
+
 import ProtectedRoute from './components/common/ProtectedRoute'
+
 import Home from './pages/Home'
+import Defect from './pages/Defect'
+import DefectUpload from './pages/DefectUpload'
+import DefectDetail from './pages/DefectDetail'
 import Report from './pages/Report'
 import ReportDetail from './pages/ReportDetail'
 import Document from './pages/Document'
@@ -17,6 +23,13 @@ function App() {
       <Route element={<ProtectedRoute />}>
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
+
+          <Route path="/defects" element={<DefectLayout />}>
+            <Route path="/defects" element={<Defect />} />
+            <Route path="/defects/upload" element={<DefectUpload />} />
+            <Route path="/defects/:id" element={<DefectDetail />} />
+          </Route>
+
           <Route path="/reports" element={<Report />} />
           <Route path="/reports/:id" element={<ReportDetail />} />
           <Route path="/documents" element={<Document />} />
