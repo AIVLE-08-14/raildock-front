@@ -31,22 +31,22 @@ export default function Header() {
           <Link to="/">대시보드</Link>
         </Button>
 
-        {/* 결함 정보 (신규) */}
+        {/* 결함 탐지 */}
         <Button
           asChild
           size="sm"
           variant={isActive("/defects") ? "default" : "ghost"}
         >
-          <Link to="/defects">결함 정보</Link>
+          <Link to="/defects">결함 탐지</Link>
         </Button>
 
-        {/* 결함 리포트 */}
+        {/* 결함 정보 */}
         <Button
           asChild
           size="sm"
           variant={isActive("/reports") ? "default" : "ghost"}
         >
-          <Link to="/reports">결함 리포트</Link>
+          <Link to="/reports">결함 정보</Link>
         </Button>
 
         {/* 문서 */}
