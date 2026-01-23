@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import {
   Card,
@@ -18,6 +19,7 @@ export default function Auth() {
   const [authMode, setAuthMode] = useState<AuthMode>('login')
   const [openTerms, setOpenTerms] = useState(false)
   const [openPrivacy, setOpenPrivacy] = useState(false)
+  const navigate = useNavigate()
 
   return (
     <div className="min-h-screen relative bg-slate-100 md:bg-transparent">
@@ -51,7 +53,10 @@ export default function Auth() {
           "
         >
           {/* 공통 헤더 */}
-          <CardHeader>
+          <CardHeader
+            onClick={() => navigate('/')}
+            className="cursor-pointer hover:opacity-90 transition"
+          >
             <CardTitle className="flex items-center gap-3 text-3xl font-semibold tracking-tight">
               <img
                 src={logo}

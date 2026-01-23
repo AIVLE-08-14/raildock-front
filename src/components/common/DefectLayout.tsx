@@ -38,7 +38,7 @@ function DefectSidebar() {
 // Defect 공통 레이아웃
 export default function DefectLayout() {
   return (
-    <div className="flex h-[calc(100vh-57px)]">
+    <div className="flex h-[calc(100vh-70px)]">
       <DefectSidebar />
       <main className="flex-1 overflow-auto">
         <Outlet />

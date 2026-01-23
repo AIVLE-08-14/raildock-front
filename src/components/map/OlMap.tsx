@@ -26,6 +26,9 @@ const TestMap: React.FC = () => {
   const [showMajorStation, setShowMajorStation] = useState(true);
   const [showDefect] = useState(false); // 아직 없음
 
+  //한국 범위
+  const koreaExtent = fromLonLat([123, 32.0]).concat(fromLonLat([132.5, 38.5]));
+
   useEffect(() => {
     if (!mapRef.current) return;
 
@@ -124,7 +127,10 @@ const TestMap: React.FC = () => {
       ],
       view: new View({
         center: fromLonLat([127, 36]),
-        zoom: 7,
+        zoom: 5,
+        minZoom: 4,
+        maxZoom: 18,
+        extent: koreaExtent,
       }),
     });
 
