@@ -32,8 +32,20 @@ export default function DefectSummary() {
       <div className="flex justify-between mb-3">
         <h3 className="font-semibold">결함 요약</h3>
         <div className="flex gap-1">
-          <Button size="sm" onClick={() => setView("chart")}>차트</Button>
-          <Button size="sm" variant="outline" onClick={() => setView("table")}>표</Button>
+          <Button
+            size="sm"
+            variant={view === "chart" ? "default" : "outline"}
+            onClick={() => setView("chart")}
+          >
+            그래프
+          </Button>
+          <Button
+            size="sm"
+            variant={view === "table" ? "default" : "outline"}
+            onClick={() => setView("table")}
+          >
+            표
+          </Button>
         </div>
       </div>
 

@@ -44,7 +44,7 @@ export default function DefectDetail() {
   // 더미 데이터
   // ===
   const images = {
-    rail: ["20260121_rail_01.jpg", "20260121_rail_02.jpg"],
+    rail: ["insulator_고속철도_220916_영암1_frame_000005.jpg", "20260121_rail_02.jpg"],
     insulator: [
       "20260121_insulator_01.jpg",
       "20260121_insulator_02.jpg",

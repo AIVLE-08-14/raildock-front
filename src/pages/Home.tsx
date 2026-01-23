@@ -5,7 +5,7 @@ import DefectAlerts from "@/components/reports/DefectAlerts"
 
 export default function Home() {
   return (
-    <div className="flex gap-4 h-[calc(100vh-57px)]">
+    <div className="flex gap-4 h-[calc(100vh-70px)]">
       {/* 좌측 리포트 */}
       <aside className="w-150 flex flex-col gap-4 overflow-y-auto pt-4 pb-4">
         <DefectSummary />

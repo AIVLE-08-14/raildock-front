@@ -63,9 +63,9 @@ export default function Header() {
           <Button
             asChild
             size="sm"
-            variant={isActive("/login") ? "default" : "outline"}
+            variant={isActive("/auth") ? "default" : "outline"}
           >
-            <Link to="/login">로그인</Link>
+            <Link to="/auth">로그인</Link>
           </Button>
         </div>
       </div>
