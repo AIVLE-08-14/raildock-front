@@ -18,7 +18,6 @@ export default defineConfig({
     },
   },
 
-  // 🔥 이 부분 추가
   server: {
     proxy: {
       "/api": {
