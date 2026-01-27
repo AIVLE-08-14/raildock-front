@@ -8,7 +8,7 @@ import {
 import type { DocumentDetail, DocumentRevision } from '@/types/document'
 import RevisionUploadModal from '@/components/documents/RevisionUploadModal'
 
-function DocumentDetailPage() {
+function DocumentDetail() {
   const { documentId } = useParams()
   const navigate = useNavigate()
 
@@ -271,4 +271,4 @@ function DocumentDetailPage() {
   )
 }
 
-export default DocumentDetailPage
+export default DocumentDetail
