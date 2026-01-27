@@ -55,7 +55,7 @@ export default function Header() {
           size="sm"
           variant={isActive("/documents") ? "default" : "ghost"}
         >
-          <Link to="/documents">문서</Link>
+          <Link to="/documents">유지보수 문서</Link>
         </Button>
 
         {/* 우측 영역 */}
