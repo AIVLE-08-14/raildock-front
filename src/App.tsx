@@ -28,13 +28,13 @@ function App() {
           <Route path="/defects" element={<DefectLayout />}>
             <Route path="/defects" element={<Defect />} />
             <Route path="/defects/upload" element={<DefectUpload />} />
-            <Route path="/defects/:id" element={<DefectDetail />} />
+            <Route path="/defects/:defectId" element={<DefectDetail />} />
           </Route>
 
           <Route path="/reports" element={<Report />} />
           <Route path="/reports/:id" element={<ReportDetail />} />
           <Route path="/documents" element={<Document />} />
-          <Route path="/documents/:id" element={<DocumentDetail />} />
+          <Route path="/documents/:documentId" element={<DocumentDetail />} />
 
           <Route path="/test" element={<Test />}/>
 

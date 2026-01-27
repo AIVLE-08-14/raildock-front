@@ -1,39 +1,53 @@
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-
-interface DocumentItem {
-  id: number
-  title: string
-  category: string
-  updatedAt: string
-}
-
-const documents: DocumentItem[] = [
-  {
-    id: 1,
-    title: '서비스 이용 약관',
-    category: '정책',
-    updatedAt: '2026-01-05',
-  },
-  {
-    id: 2,
-    title: '개인정보 처리방침',
-    category: '정책',
-    updatedAt: '2026-01-02',
-  },
-  {
-    id: 3,
-    title: '지도 API 연동 가이드',
-    category: '기술 문서',
-    updatedAt: '2026-01-11',
-  },
-]
+import { getDocumentList } from '@/api/documents'
+import type { DocumentListItem } from '@/types/document'
+import DocumentCreateModal from '@/components/documents/DocumentCreateModal'
 
 function Document() {
+  const [documents, setDocuments] = useState<DocumentListItem[]>([])
+  const [loading, setLoading] = useState(true)
+  const [open, setOpen] = useState(false)
+
+  const load = async () => {
+    setLoading(true)
+    const res = await getDocumentList()
+    setDocuments(res)
+    setLoading(false)
+  }
+
+  useEffect(() => {
+    load()
+  }, [])
+
   return (
-    <div className="p-6 max-w-4xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">문서</h1>
+    <div className="p-6 max-w-5xl mx-auto">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold">
+          유지보수 문서
+        </h1>
+
+        <button
+          className="px-4 py-2 rounded bg-blue-500 text-white text-sm"
+          onClick={() => setOpen(true)}
+        >
+          문서 생성
+        </button>
+      </div>
 
       <div className="bg-white rounded-xl shadow divide-y">
+        {loading && (
+          <div className="p-4 text-gray-500">
+            로딩 중...
+          </div>
+        )}
+
+        {!loading && documents.length === 0 && (
+          <div className="p-4 text-gray-500">
+            등록된 문서가 없습니다.
+          </div>
+        )}
+
         {documents.map((doc) => (
           <Link
             key={doc.id}
@@ -43,10 +57,11 @@ function Document() {
             <div className="flex justify-between items-center">
               <div>
                 <h2 className="font-semibold text-gray-800">
-                  {doc.title}
+                  {doc.name}
                 </h2>
                 <p className="text-sm text-gray-500">
-                  {doc.category} · 최종 수정 {doc.updatedAt}
+                  최신 버전 v{doc.latestVersion} ·{' '}
+                  {new Date(doc.updatedAt).toLocaleDateString()}
                 </p>
               </div>
 
@@ -57,6 +72,13 @@ function Document() {
           </Link>
         ))}
       </div>
+
+      {open && (
+        <DocumentCreateModal
+          onClose={() => setOpen(false)}
+          onSuccess={load}
+        />
+      )}
     </div>
   )
 }
