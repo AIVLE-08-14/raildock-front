@@ -28,7 +28,7 @@ function App() {
           <Route path="/defects" element={<DefectLayout />}>
             <Route path="/defects" element={<Defect />} />
             <Route path="/defects/upload" element={<DefectUpload />} />
-            <Route path="/defects/:defectId" element={<DefectDetail />} />
+            <Route path="/defects/:id" element={<DefectDetail />} />
           </Route>
 
           <Route path="/reports" element={<Report />} />
