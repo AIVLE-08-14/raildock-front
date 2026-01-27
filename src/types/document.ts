@@ -5,7 +5,7 @@ export interface DocumentListItem {
   id: string
   name: string
   latestVersion: number
-  updatedAt: string
+  createdAt: string
 }
 
 // 문서 개정 이력 (GET /documents/{id} 기준)

@@ -61,7 +61,7 @@ function Document() {
                 </h2>
                 <p className="text-sm text-gray-500">
                   최신 버전 v{doc.latestVersion} ·{' '}
-                  {new Date(doc.updatedAt).toLocaleDateString()}
+                  {new Date(doc.createdAt).toLocaleDateString()}
                 </p>
               </div>
 
