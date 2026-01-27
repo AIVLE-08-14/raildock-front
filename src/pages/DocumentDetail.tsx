@@ -237,7 +237,7 @@ function DocumentDetail() {
                     : 'bg-gray-300 cursor-not-allowed'
                 }`}
               >
-                삭제
+                삭
               </button>
             </div>
           </div>
