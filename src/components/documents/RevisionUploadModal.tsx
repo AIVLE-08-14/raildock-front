@@ -1,21 +1,23 @@
 import { useState } from 'react'
-import { uploadDocumentRevision } from '@/api/documents'
+import { useUploadRevisionMutation } from '@/api/queries/documentsQueries'
 
 interface Props {
   documentId: string
   onClose: () => void
-  onSuccess: () => void
 }
 
 function RevisionUploadModal({
   documentId,
   onClose,
-  onSuccess,
 }: Props) {
   const [file, setFile] = useState<File | null>(null)
-  const [loading, setLoading] = useState(false)
 
-  const handleUpload = async () => {
+  const {
+    mutate: upload,
+    isPending,
+  } = useUploadRevisionMutation(documentId)
+
+  const handleUpload = () => {
     if (!file) {
       alert('PDF 파일을 선택하세요.')
       return
@@ -26,16 +28,14 @@ function RevisionUploadModal({
       return
     }
 
-    try {
-      setLoading(true)
-      await uploadDocumentRevision(documentId, file)
-      onSuccess()
-      onClose()
-    } catch (e) {
-      alert('업로드 실패')
-    } finally {
-      setLoading(false)
-    }
+    upload(file, {
+      onSuccess: () => {
+        onClose()
+      },
+      onError: () => {
+        alert('업로드 실패')
+      },
+    })
   }
 
   return (
@@ -63,10 +63,10 @@ function RevisionUploadModal({
           </button>
           <button
             onClick={handleUpload}
-            disabled={loading}
+            disabled={isPending}
             className="px-3 py-1 text-sm rounded bg-blue-500 text-white"
           >
-            {loading ? '업로드 중...' : '업로드'}
+            {isPending ? '업로드 중...' : '업로드'}
           </button>
         </div>
       </div>

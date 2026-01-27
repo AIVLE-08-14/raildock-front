@@ -1,20 +1,22 @@
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import {
-  getDocumentDetail,
-  deleteDocument,
-  updateDocument,
-} from '@/api/documents'
-import type { DocumentDetail, DocumentRevision } from '@/types/document'
+  useDocumentDetailQuery,
+  useUpdateDocumentMutation,
+  useDeleteDocumentMutation,
+} from '@/api/queries/documentsQueries'
+import type { DocumentRevision } from '@/types/document'
 import RevisionUploadModal from '@/components/documents/RevisionUploadModal'
 
 function DocumentDetailPage() {
   const { documentId } = useParams()
   const navigate = useNavigate()
 
-  const [data, setData] = useState<DocumentDetail | null>(null)
+  const { data, isLoading } = useDocumentDetailQuery(documentId)
+  const updateMutation = useUpdateDocumentMutation(documentId!)
+  const deleteMutation = useDeleteDocumentMutation()
+
   const [selected, setSelected] = useState<DocumentRevision | null>(null)
-  const [loading, setLoading] = useState(true)
 
   const [uploadOpen, setUploadOpen] = useState(false)
   const [editOpen, setEditOpen] = useState(false)
@@ -22,78 +24,52 @@ function DocumentDetailPage() {
 
   const [editName, setEditName] = useState('')
   const [editDescription, setEditDescription] = useState('')
-
   const [deleteInput, setDeleteInput] = useState('')
 
-  const getLatestRevision = (history: DocumentRevision[]) => {
-    return [...history].sort((a, b) => b.version - a.version)[0] ?? null
-  }
-
-  const reload = async () => {
-    if (!documentId) return
-    const res = await getDocumentDetail(documentId)
-    setData(res)
-    setSelected(getLatestRevision(res.history))
-  }
+  const latestRevision = useMemo(() => {
+    if (!data) return null
+    return [...data.history].sort((a, b) => b.version - a.version)[0] ?? null
+  }, [data])
 
   useEffect(() => {
-    if (!documentId) return
-
-    getDocumentDetail(documentId)
-      .then((res) => {
-        setData(res)
-        setSelected(getLatestRevision(res.history))
-        setEditName(res.name)
-        setEditDescription(res.description)
-      })
-      .finally(() => setLoading(false))
-  }, [documentId])
+    if (!data) return
+    setSelected((prev) => prev ?? latestRevision)
+  }, [data, latestRevision])
 
   const iframeSrc = useMemo(() => {
     if (!selected) return ''
-
     if (import.meta.env.DEV) {
       return selected.downloadUrl.replace(
         import.meta.env.VITE_Backend_URL,
         '/api'
       )
     }
-
     return selected.downloadUrl
   }, [selected])
 
-  const handleUpdate = async () => {
-    if (!documentId) return
-
-    await updateDocument(documentId, {
-      name: editName,
-      description: editDescription,
-    })
-
-    setEditOpen(false)
-    await reload()
-  }
-
-  const handleDelete = async () => {
-    if (!documentId || !data) return
-
-    const confirmText = `${data.name}/삭제`
-    if (deleteInput !== confirmText) return
-
-    await deleteDocument(documentId)
-    navigate('/documents')
-  }
-
-  if (loading) {
-    return <div className="p-6">로딩 중...</div>
-  }
+  if (isLoading) return <div className="p-6">로딩 중...</div>
+  if (!data) return <div className="p-6">문서를 찾을 수 없습니다.</div>
 
   const deleteConfirmText = `${data.name}/삭제`
   const canDelete = deleteInput === deleteConfirmText
 
+  const handleUpdate = async () => {
+    await updateMutation.mutateAsync({
+      name: editName,
+      description: editDescription,
+    })
+    setEditOpen(false)
+  }
+
+  const handleDelete = async () => {
+    if (!canDelete || !documentId) return
+    await deleteMutation.mutateAsync(documentId)
+    navigate('/documents')
+  }
+
   return (
     <div className="p-6 max-w-7xl mx-auto">
-      {/* 상단 헤더 */}
+      {/* 헤더 */}
       <div className="flex justify-between items-start mb-4">
         <div>
           <button
@@ -109,14 +85,18 @@ function DocumentDetailPage() {
 
         <div className="flex gap-2">
           <button
-            onClick={() => setSelected(getLatestRevision(data.history))}
+            onClick={() => setSelected(latestRevision)}
             className="px-3 py-1 rounded bg-blue-500 text-white text-sm"
           >
             최신 문서 보기
           </button>
 
           <button
-            onClick={() => setEditOpen(true)}
+            onClick={() => {
+              setEditName(data.name)
+              setEditDescription(data.description)
+              setEditOpen(true)
+            }}
             className="px-3 py-1 rounded bg-gray-100 text-sm"
           >
             정보 수정
@@ -139,7 +119,7 @@ function DocumentDetailPage() {
       </div>
 
       <div className="grid grid-cols-4 gap-4">
-        {/* PDF 뷰어 */}
+        {/* PDF */}
         <div className="col-span-3 bg-white rounded-xl shadow">
           <iframe
             src={iframeSrc}
@@ -160,7 +140,7 @@ function DocumentDetailPage() {
                   key={rev.revisionId}
                   onClick={() => setSelected(rev)}
                   className={`p-2 rounded cursor-pointer border ${
-                    selected.revisionId === rev.revisionId
+                    selected?.revisionId === rev.revisionId
                       ? 'bg-blue-50 border-blue-400'
                       : 'hover:bg-gray-50'
                   }`}
@@ -175,12 +155,11 @@ function DocumentDetailPage() {
         </div>
       </div>
 
-      {/* 개정 업로드 모달 */}
+      {/* 업로드 모달 */}
       {uploadOpen && (
         <RevisionUploadModal
           documentId={documentId!}
           onClose={() => setUploadOpen(false)}
-          onSuccess={reload}
         />
       )}
 
@@ -194,14 +173,12 @@ function DocumentDetailPage() {
               className="w-full border rounded px-3 py-2"
               value={editName}
               onChange={(e) => setEditName(e.target.value)}
-              placeholder="문서명"
             />
 
             <textarea
               className="w-full border rounded px-3 py-2"
               value={editDescription}
               onChange={(e) => setEditDescription(e.target.value)}
-              placeholder="설명"
             />
 
             <div className="flex justify-end gap-2">
@@ -231,7 +208,7 @@ function DocumentDetailPage() {
             </h2>
 
             <p className="text-sm text-gray-600">
-              삭제하려면 아래 문구를 정확히 입력하세요
+              아래 문구를 정확히 입력해야 삭제됩니다.
             </p>
 
             <div className="text-sm font-mono bg-gray-100 p-2 rounded">
@@ -242,7 +219,6 @@ function DocumentDetailPage() {
               className="w-full border rounded px-3 py-2"
               value={deleteInput}
               onChange={(e) => setDeleteInput(e.target.value)}
-              placeholder="문서명/삭제"
             />
 
             <div className="flex justify-end gap-2">

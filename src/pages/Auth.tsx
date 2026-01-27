@@ -9,8 +9,8 @@ import {
 } from '@/components/ui/card'
 import imgLoginVisual from '@/assets/images/LoginImage.png'
 import logo from '@/assets/icons/logo.svg'
-import LoginForm from '@/components/auth/LoginForm'
-import SignupForm from '@/components/auth/SignupForm'
+import LoginForm from '@/components/auth/loginForm'
+import SignupForm from '@/components/auth/signupForm'
 import AgreementModal from './../components/auth/AgreementModal';
 
 type AuthMode = 'login' | 'signup'
