@@ -37,6 +37,12 @@ export default function LoginForm({ onSwitch, onOpenTerms, onOpenPrivacy }: Prop
     )
   }
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleLogin()
+    }
+  }
+
   return (
     <div className="space-y-8 md:space-y-6 lg:space-y-5">
       {/* 사원번호 */}
@@ -48,6 +54,7 @@ export default function LoginForm({ onSwitch, onOpenTerms, onOpenPrivacy }: Prop
           className="h-11 md:h-10 lg:h-9"
           value={employeeId}
           onChange={(e) => setEmployeeId(e.target.value)}
+          onKeyDown={handleKeyDown}
         />
       </div>
 
@@ -60,6 +67,7 @@ export default function LoginForm({ onSwitch, onOpenTerms, onOpenPrivacy }: Prop
           className="h-11 md:h-10 lg:h-9"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          onKeyDown={handleKeyDown}
         />
       </div>
 
@@ -67,8 +75,9 @@ export default function LoginForm({ onSwitch, onOpenTerms, onOpenPrivacy }: Prop
       <Button
         className="w-full h-11 md:h-10 lg:h-9 text-base md:text-sm font-semibold"
         onClick={handleLogin}
+        disabled={loginMutation.isPending}
       >
-        로그인
+        {loginMutation.isPending ? '로그인 중...' : '로그인'}
       </Button>
 
       {/* 회원가입 전환 */}
