@@ -1,14 +1,14 @@
-// src/types/Auth.ts
+// src/types/authTypes.ts
+import type { ApiResponse } from './common'
 
 export interface AuthUser {
   id: number
+  employeeId: string
   name: string
-  role: 'ADMIN' | 'USER'
+  role: 'ADMIN' | 'WORKER'
 }
 
-export interface MeResponse {
-  user: AuthUser | null
-}
+export type MeResponse = ApiResponse<AuthUser>
 
 export interface AuthState {
   isAuthenticated: boolean
@@ -20,9 +20,7 @@ export interface LoginRequest {
   password: string
 }
 
-export interface LoginResponse {
-  user: AuthUser
-}
+export type LoginResponse = ApiResponse<null>
 
 export interface SignupRequest {
     employeeId: string
@@ -32,6 +30,9 @@ export interface SignupRequest {
     email: string
 }
 
-export interface SignupResponse {
-    user: AuthUser
+export type SignupResponse = ApiResponse<AuthUser>
+
+export interface AuthState {
+  isAuthenticated: boolean
+  user: AuthUser | null
 }

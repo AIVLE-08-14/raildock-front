@@ -5,10 +5,16 @@ import { Eye, EyeOff } from 'lucide-react'
 interface Props {
   value: string
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void
   className?: string
 }
 
-export default function SecretInput({ value, onChange, className }: Props) {
+export default function SecretInput({
+  value,
+  onChange,
+  onKeyDown,
+  className,
+}: Props) {
   const [visible, setVisible] = useState(false)
 
   return (
@@ -17,6 +23,7 @@ export default function SecretInput({ value, onChange, className }: Props) {
         type={visible ? 'text' : 'password'}
         value={value}
         onChange={onChange}
+        onKeyDown={onKeyDown}
         className={`pr-10 ${className ?? ''}`}
       />
 

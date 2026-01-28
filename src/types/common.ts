@@ -1,7 +1,8 @@
 // src/types/common.ts
 
-export interface ApiResponse<T> {
+export interface ApiResponse<T = null> {
   success: boolean
-  message?: string
+  code: string
+  message: string
   data: T
 }
