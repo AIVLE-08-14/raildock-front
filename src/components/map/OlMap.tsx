@@ -5,7 +5,6 @@ import TileLayer from "ol/layer/Tile";
 import VectorLayer from "ol/layer/Vector";
 import OSM from "ol/source/OSM";
 import VectorSource from "ol/source/Vector";
-import Cluster from "ol/source/Cluster";
 import GeoJSON from "ol/format/GeoJSON";
 import { Stroke, Style, Fill, Text } from "ol/style";
 import CircleStyle from "ol/style/Circle";
@@ -18,12 +17,10 @@ const TestMap: React.FC = () => {
   // 레이어 ref (중요)
   const routeLayerRef = useRef<VectorLayer | null>(null);
   const stationLayerRef = useRef<VectorLayer | null>(null);
-  const majorStationLayerRef = useRef<VectorLayer | null>(null);
 
   // 체크박스 상태
   const [showRoute, setShowRoute] = useState(true);
   const [showStation, setShowStation] = useState(true);
-  const [showMajorStation, setShowMajorStation] = useState(true);
   const [showDefect] = useState(false); // 아직 없음
 
   //한국 범위
@@ -49,70 +46,24 @@ const TestMap: React.FC = () => {
     routeLayerRef.current = routeLayer;
 
     /** =====================
-     *  역 (Point) - Cluster
-     *  ===================== */
-    const stationSource = new VectorSource({
-      url: "/data/Rail_route_station_2023.geojson",
-      format: new GeoJSON(),
-    });
-
-    const clusterSource = new Cluster({
-      distance: 40,
-      source: stationSource,
-    });
-
-    const clusterStyle = (feature: any) => {
-      const size = feature.get("features").length;
-
-      if (size === 1) {
-        return new Style({
-          image: new CircleStyle({
-            radius: 5,
-            fill: new Fill({ color: "#0077cc" }),
-            stroke: new Stroke({ color: "#ffffff", width: 1 }),
-          }),
-        });
-      }
-
-      return new Style({
-        image: new CircleStyle({
-          radius: 12,
-          fill: new Fill({ color: "#ff6600" }),
-        }),
-        text: new Text({
-          text: String(size),
-          fill: new Fill({ color: "#ffffff" }),
-        }),
-      });
-    };
-
-    const stationClusterLayer = new VectorLayer({
-      source: clusterSource,
-      style: clusterStyle,
-      visible: showStation,
-    });
-
-    stationLayerRef.current = stationClusterLayer;
-
-    /** =====================
      *  주요역 (Point)
      *  ===================== */
-    const majorStationLayer = new VectorLayer({
+    const stationLayer = new VectorLayer({
       source: new VectorSource({
-        url: "/data/Rail_time_table_2023.geojson",
+        url: "/data/Rail_route_station_2023.geojson",
         format: new GeoJSON(),
       }),
       style: new Style({
         image: new CircleStyle({
           radius: 6,
-          fill: new Fill({ color: "#cc0000" }),
+          fill: new Fill({ color: "#0081cc" }),
           stroke: new Stroke({ color: "#ffffff", width: 1 }),
         }),
       }),
-      visible: showMajorStation,
+      visible: showStation,
     });
 
-    majorStationLayerRef.current = majorStationLayer;
+    stationLayerRef.current = stationLayer;
 
     /** =====================
      *  지도 생성
@@ -122,8 +73,7 @@ const TestMap: React.FC = () => {
       layers: [
         new TileLayer({ source: new OSM() }),
         routeLayer,
-        stationClusterLayer,
-        majorStationLayer,
+        stationLayer,
       ],
       view: new View({
         center: fromLonLat([127, 36]),
@@ -151,10 +101,6 @@ const TestMap: React.FC = () => {
   useEffect(() => {
     stationLayerRef.current?.setVisible(showStation);
   }, [showStation]);
-
-  useEffect(() => {
-    majorStationLayerRef.current?.setVisible(showMajorStation);
-  }, [showMajorStation]);
 
   return (
     <div style={{ width: "100%", height: "100vh", position: "relative" }}>
@@ -188,16 +134,6 @@ const TestMap: React.FC = () => {
               onChange={() => setShowStation(!showStation)}
             />{" "}
             역
-          </label>
-        </div>
-        <div>
-          <label>
-            <input
-              type="checkbox"
-              checked={showMajorStation}
-              onChange={() => setShowMajorStation(!showMajorStation)}
-            />{" "}
-            주요역
           </label>
         </div>
         <div>
