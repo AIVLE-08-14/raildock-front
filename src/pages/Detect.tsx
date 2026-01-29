@@ -1,6 +1,7 @@
+// src/pages/Detect.tsx
 import { Card, CardContent } from "@/components/ui/card"
 
-export default function Defect() {
+export default function Detect() {
   return (
     <div className="h-full flex items-center justify-center p-8">
       <Card className="max-w-md w-full">

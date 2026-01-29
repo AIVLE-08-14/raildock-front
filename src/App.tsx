@@ -1,14 +1,14 @@
 import { Routes, Route } from 'react-router-dom'
 
 import Layout from './components/common/Layout'
-import DefectLayout from './components/common/DefectLayout'
+import DetectLayout from './components/common/DetectLayout'
 
 import ProtectedRoute from './components/common/ProtectedRoute'
 
 import Home from './pages/Home'
-import Defect from './pages/Defect'
-import DefectUpload from './pages/DefectUpload'
-import DefectDetail from './pages/DefectDetail'
+import Detect from './pages/Detect'
+import DetectUpload from './pages/DetectUpload'
+import DetectDetail from './pages/DetectDetail'
 import Report from './pages/Report'
 import ReportDetail from './pages/ReportDetail'
 import Document from './pages/Document'
@@ -25,10 +25,10 @@ function App() {
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
 
-          <Route path="/defects" element={<DefectLayout />}>
-            <Route path="/defects" element={<Defect />} />
-            <Route path="/defects/upload" element={<DefectUpload />} />
-            <Route path="/defects/:id" element={<DefectDetail />} />
+          <Route path="/detects" element={<DetectLayout />}>
+            <Route path="/detects" element={<Detect />} />
+            <Route path="/detects/upload" element={<DetectUpload />} />
+            <Route path="/detects/:id" element={<DetectDetail />} />
           </Route>
 
           <Route path="/reports" element={<Report />} />

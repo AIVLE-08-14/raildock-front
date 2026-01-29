@@ -1,46 +1,32 @@
-import { useParams, useNavigate } from "react-router-dom"
-import { useEffect, useRef, useState } from "react"
-
-import insulatorData from "@/data/insulator_고속철도_220916_영암1_frame_000005.json"
+import { useNavigate } from 'react-router-dom'
+import { useEffect, useRef, useState } from 'react'
 
 type BBox = [number, number, number, number]
 
-const DATA_MAP: Record<string, any> = {
-  "insulator_고속철도_220916_영암1_frame_000005.jpg": insulatorData,
+type DetectionItem = {
+  bbox_xyxy: BBox
+  rail_type: string
+  cls_name: string
+  detail: string
+  confidence: number
 }
 
 function ReportDetail() {
-  const { id } = useParams()
   const navigate = useNavigate()
-
-  const decodedId = decodeURIComponent(id!)
-  const data = DATA_MAP[decodedId]
-
   const imgRef = useRef<HTMLImageElement | null>(null)
 
+  /** =====================
+   * 상태 (나중에 API로 교체)
+   * ===================== */
+  const [imageSrc] = useState<string>('') // 이미지 URL
+  const [items, setItems] = useState<DetectionItem[]>([])
   const [scale, setScale] = useState({ x: 1, y: 1 })
-  const [items, setItems] = useState<any[]>(data?.detections ?? [])
   const [selectedIdx, setSelectedIdx] = useState<number | null>(null)
   const [openModal, setOpenModal] = useState(false)
 
-  if (!data) {
-    return <div className="p-6">데이터를 찾을 수 없습니다.</div>
-  }
-
-  const imageSrc = `/data/${data.image_file}`
-
-  const metadata = {
-    file_name: data.image_file,
-    datetime: "2022-09-16 14:23:10",
-    region_name: "영암1",
-    resolution: "1920 x 1080",
-    fps: 30,
-    weather: "맑음",
-    temperature: 23,
-    humidity: 55,
-    illuminance: 12000,
-  }
-
+  /** =====================
+   * 이미지 스케일 계산
+   * ===================== */
   useEffect(() => {
     const img = imgRef.current
     if (!img) return
@@ -52,8 +38,8 @@ function ReportDetail() {
       })
     }
 
-    img.addEventListener("load", handleLoad)
-    return () => img.removeEventListener("load", handleLoad)
+    img.addEventListener('load', handleLoad)
+    return () => img.removeEventListener('load', handleLoad)
   }, [])
 
   return (
@@ -67,15 +53,21 @@ function ReportDetail() {
           ← 목록으로
         </button>
 
-        <div className="relative inline-block max-h-[80vh] overflow-auto border">
-          <img
-            ref={imgRef}
-            src={imageSrc}
-            className="block max-w-full"
-          />
+        <div className="relative inline-block max-h-[80vh] overflow-auto border bg-gray-100">
+          {imageSrc ? (
+            <img
+              ref={imgRef}
+              src={imageSrc}
+              className="block max-w-full"
+            />
+          ) : (
+            <div className="w-[800px] h-[450px] flex items-center justify-center text-gray-400">
+              이미지 영역
+            </div>
+          )}
 
-          {items.map((det: any, idx: number) => {
-            const [x1, y1, x2, y2] = det.bbox_xyxy as BBox
+          {items.map((det, idx) => {
+            const [x1, y1, x2, y2] = det.bbox_xyxy
 
             return (
               <div
@@ -86,8 +78,8 @@ function ReportDetail() {
                 }}
                 className={`absolute cursor-pointer border-2 ${
                   selectedIdx === idx
-                    ? "border-yellow-400"
-                    : "border-red-500"
+                    ? 'border-yellow-400'
+                    : 'border-red-500'
                 }`}
                 style={{
                   left: x1 * scale.x,
@@ -96,8 +88,8 @@ function ReportDetail() {
                   height: (y2 - y1) * scale.y,
                 }}
               >
-                <span className="absolute -top-10 left-0 bg-red-500/70 text-white text-3xl px-1 whitespace-nowrap inline-block z-10">
-                  {det.rail_type}_{det.cls_name}_{det.detail} ({det.confidence.toFixed(2)})
+                <span className="absolute -top-7 left-0 bg-red-500/70 text-white text-xs px-1 whitespace-nowrap">
+                  {det.rail_type}_{det.cls_name}_{det.detail}
                 </span>
               </div>
             )
@@ -105,34 +97,30 @@ function ReportDetail() {
         </div>
       </main>
 
-      {/* 우측: 상세 정보 */}
+      {/* 우측: 정보 패널 */}
       <aside className="w-80 border-l p-6 bg-gray-50">
         <h3 className="text-lg font-semibold mb-4">영상 정보</h3>
 
-        <div className="flex flex-col gap-3 text-sm">
-          <Info label="파일명" value={metadata.file_name} />
-          <Info label="촬영 일시" value={metadata.datetime} />
-          <Info label="촬영 구간" value={metadata.region_name} />
+        <div className="flex flex-col gap-3 text-sm text-gray-600">
+          <Info label="파일명" value="-" />
+          <Info label="촬영 일시" value="-" />
+          <Info label="촬영 구간" value="-" />
 
           <div className="grid grid-cols-2 gap-2">
-            <Info label="해상도" value={metadata.resolution} />
-            <Info label="FPS" value={metadata.fps} />
+            <Info label="해상도" value="-" />
+            <Info label="FPS" value="-" />
           </div>
 
           <div className="grid grid-cols-2 gap-2">
-            <Info label="날씨" value={metadata.weather} />
-            <Info
-              label="온도 / 습도"
-              value={`${metadata.temperature}℃ / ${metadata.humidity}%`}
-            />
+            <Info label="날씨" value="-" />
+            <Info label="온도 / 습도" value="-" />
           </div>
 
-          <Info label="조도" value={`${metadata.illuminance} lux`} />
-          <Info label="영상 ID" value={decodedId} />
+          <Info label="영상 ID" value="-" />
         </div>
       </aside>
 
-      {/* 오탐 확인 모달 */}
+      {/* 오탐 처리 모달 */}
       {openModal && selectedIdx !== null && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-lg w-80 p-6">
@@ -173,7 +161,7 @@ function ReportDetail() {
   )
 }
 
-function Info({ label, value }: { label: string; value: any }) {
+function Info({ label, value }: { label: string; value: string }) {
   return (
     <div>
       <div className="text-muted-foreground">{label}</div>

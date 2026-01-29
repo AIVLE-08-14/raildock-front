@@ -1,7 +1,7 @@
 import TestMap from "@/components/map/OlMap"
-import DefectSummary from "@/components/reports/DefectSummary"
-import DefectTrend from "@/components/reports/DefectTrend"
-import DefectAlerts from "@/components/reports/DefectAlerts"
+import DefectSummary from "@/components/reports/DetectSummary"
+import DefectTrend from "@/components/reports/DetectTrend"
+import DefectAlerts from "@/components/reports/DetectAlerts"
 
 export default function Home() {
   return (
