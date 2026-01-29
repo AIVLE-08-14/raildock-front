@@ -7,10 +7,10 @@ import type {
   CreateDetectResponse,
   DetectDetail,
   DetectListResponse,
+  DetectListItem,
 } from '@/types/detect'
 
 // Query Keys
-
 export const detectQueryKeys = {
   all: ['detects'] as const,
   list: (page: number, size: number) =>
@@ -19,12 +19,21 @@ export const detectQueryKeys = {
     [...detectQueryKeys.all, 'detail', id] as const,
 }
 
+// =======================
 // Queries
+// =======================
+
 // 결함 목록
 export function useDetectList(page = 0, size = 20) {
-  return useQuery<DetectListResponse>({
+  return useQuery<DetectListResponse, Error, DetectListItem[]>({
     queryKey: detectQueryKeys.list(page, size),
     queryFn: () => detectApi.getList(page, size),
+
+    // 🔑 핵심: UI에서는 items 배열만 보게 만든다
+    select: (data) => data.items,
+
+    // 선택 사항: Sidebar에서 첫 렌더 안전성 강화
+    initialData: { items: [] },
   })
 }
 
@@ -37,7 +46,9 @@ export function useDetectDetail(id: number) {
   })
 }
 
+// =======================
 // Mutation
+// =======================
 
 export function useCreateDetect() {
   return useMutation<

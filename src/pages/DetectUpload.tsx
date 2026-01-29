@@ -51,7 +51,7 @@ export default function DetectUpload() {
       },
     })
 
-    navigate(`/detects/${res.id}`)
+    navigate(`/detects/${res.detectionId}`)
   }
 
   return (

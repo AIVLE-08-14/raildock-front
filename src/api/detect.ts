@@ -18,7 +18,10 @@ export const detectApi = {
     const res = await apiClient.get<DetectListResponse>('/detect', {
       params: { page, size },
     })
-    return res.data
+
+    return {
+      items: res.data.items ?? [],
+    }
   },
 
   // 결함 탐지 상세 조회
@@ -44,7 +47,11 @@ export const detectApi = {
     const formData = new FormData()
 
     Object.entries(params).forEach(([key, value]) => {
-      if (value !== undefined && value !== null) {
+      if (value === undefined || value === null) return
+
+      if (value instanceof Date) {
+        formData.append(key, value.toISOString())
+      } else {
         formData.append(key, String(value))
       }
     })
@@ -59,12 +66,7 @@ export const detectApi = {
 
     const res = await apiClient.post<CreateDetectResponse>(
       '/detect',
-      formData,
-      {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      }
+      formData
     )
 
     return res.data

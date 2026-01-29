@@ -4,15 +4,15 @@ export type DetectCategory = 'rail' | 'insulator' | 'nest'
 // 결함 리스트
 export interface DetectListItem {
   id: number
-  fileName: string
-  createdAt: string
+  name: string
+  section: string
+  datetime: string
+  direction: string
+  taskStatus: string
 }
 
 export interface DetectListResponse {
-  content: DetectListItem[]
-  page: number
-  size: number
-  totalElements: number
+  items: DetectListItem[]
 }
 
 // 결함 상세
@@ -41,8 +41,23 @@ export interface DetectResult {
 
 export interface DetectDetail {
   id: number
-  metadata: DetectMetadata
-  results: DetectResult[]
+  name: string
+  section: string
+  datetime: string
+  direction: string
+  weather?: string
+  temperature?: number
+  humidity?: number
+
+  metadataUrl?: string
+
+  insulatorVideoUrl?: string
+  railVideoUrl?: string
+  nestVideoUrl?: string
+
+  taskStatus: string
+  errorMessage?: string
+  resultZipUrl?: string
 }
 
 // 생성 (업로드)
@@ -57,5 +72,5 @@ export interface CreateDetectParams {
 }
 
 export interface CreateDetectResponse {
-  id: number
+  detectionId: number
 }
