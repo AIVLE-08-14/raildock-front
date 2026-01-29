@@ -1,69 +1,64 @@
-import { useEffect, useRef, useState } from "react"
-import data from "@/data/insulator_고속철도_220916_영암1_frame_000005.json"
+import { Link } from 'react-router-dom'
 
-type BBox = [number, number, number, number]
+interface ReportItem {
+  id: number
+  title: string
+  status: 'OPEN' | 'DONE'
+  createdAt: string
+}
 
-export default function TestPage() {
-  const imgRef = useRef<HTMLImageElement | null>(null)
+const reports: ReportItem[] = [
+  {
+    id: 1,
+    title: '지도 로딩 오류',
+    status: 'OPEN',
+    createdAt: '2026-01-10',
+  },
+  {
+    id: 2,
+    title: '로그인 실패 이슈',
+    status: 'DONE',
+    createdAt: '2026-01-08',
+  },
+]
 
-  const [scale, setScale] = useState({ x: 1, y: 1 })
-
-  const detections = data.detections
-  const imageSrc = `/data/insulator_고속철도_220916_영암1_frame_000005.jpg`
-
-  useEffect(() => {
-    const img = imgRef.current
-    if (!img) return
-
-    const handleLoad = () => {
-      const scaleX = img.clientWidth / img.naturalWidth
-      const scaleY = img.clientHeight / img.naturalHeight
-      setScale({ x: scaleX, y: scaleY })
-    }
-
-    img.addEventListener("load", handleLoad)
-    return () => img.removeEventListener("load", handleLoad)
-  }, [])
-
+function Test() {
   return (
-    <div className="p-6">
-      <h1 className="text-xl font-bold mb-4">BBox Test</h1>
+    <div className="p-6 max-w-4xl mx-auto">
+      <h1 className="text-2xl font-bold mb-4">리포트 목록</h1>
 
-      <div className="relative inline-block border">
-        <img
-          ref={imgRef}
-          src={imageSrc}
-          alt="test"
-          className="block"
-        />
+      <div className="bg-white rounded-xl shadow divide-y">
+        {reports.map((report) => (
+          <Link
+            key={report.id}
+            to={`/reports/${report.id}`}
+            className="block p-4 hover:bg-gray-50 transition"
+          >
+            <div className="flex justify-between items-center">
+              <div>
+                <h2 className="font-semibold text-gray-800">
+                  {report.title}
+                </h2>
+                <p className="text-sm text-gray-500">
+                  생성일: {report.createdAt}
+                </p>
+              </div>
 
-        {detections.map((det, idx) => {
-          const [x1, y1, x2, y2] = det.bbox_xyxy as BBox
-
-          const left = x1 * scale.x
-          const top = y1 * scale.y
-          const width = (x2 - x1) * scale.x
-          const height = (y2 - y1) * scale.y
-
-          return (
-            <div
-              key={idx}
-              className="absolute border-2 border-red-500"
-              style={{
-                left,
-                top,
-                width,
-                height,
-              }}
-            >
               <span
-  className="absolute -top-5 left-0 bg-red-500 text-white text-xs px-1 whitespace-nowrap inline-block z-10">
-                {det.cls_name} ({det.confidence.toFixed(2)})
+                className={`text-xs px-2 py-1 rounded-full ${
+                  report.status === 'OPEN'
+                    ? 'bg-red-100 text-red-600'
+                    : 'bg-green-100 text-green-600'
+                }`}
+              >
+                {report.status}
               </span>
             </div>
-          )
-        })}
+          </Link>
+        ))}
       </div>
     </div>
   )
 }
+
+export default Test
