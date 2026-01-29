@@ -1,8 +1,8 @@
 import { createContext } from 'react'
-import type { MeResponse } from '@/types/authTypes'
+import type { AuthUser } from '@/types/authTypes'
 
 export type AuthContextValue = {
-  user: MeResponse['user']
+  user: AuthUser | null
   isAuthenticated: boolean
 }
 
