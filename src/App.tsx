@@ -28,11 +28,11 @@ function App() {
           <Route path="/detects" element={<DetectLayout />}>
             <Route path="/detects" element={<Detect />} />
             <Route path="/detects/upload" element={<DetectUpload />} />
-            <Route path="/detects/:id" element={<DetectDetail />} />
+            <Route path="/detects/:detectionId" element={<DetectDetail />} />
           </Route>
 
           <Route path="/reports" element={<Report />} />
-          <Route path="/reports/:id" element={<ReportDetail />} />
+          <Route path="/reports/:problemDetectionId" element={<ReportDetail />} />
           <Route path="/documents" element={<Document />} />
           <Route path="/documents/:documentId" element={<DocumentDetail />} />
 
