@@ -1,171 +1,178 @@
-import { useNavigate } from 'react-router-dom'
-import { useEffect, useRef, useState } from 'react'
+// src/pages/ProblemDetail.tsx
 
-type BBox = [number, number, number, number]
+import { useNavigate, useParams } from 'react-router-dom'
+import { useProblemDetail, useDeleteProblem, useUpdateProblemStatus, useUpdateProblemManager,} from '@/api/queries/problemQueries'
+import type { ProblemStatus } from '@/types/problem'
+import { useEffect, useState } from 'react'
 
-type DetectionItem = {
-  bbox_xyxy: BBox
-  rail_type: string
-  cls_name: string
-  detail: string
-  confidence: number
-}
+import { Card, CardContent, CardHeader, CardTitle,} from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue,} from '@/components/ui/select'
+import { Input } from '@/components/ui/input'
+import { Separator } from '@/components/ui/separator'
+import { Badge } from '@/components/ui/badge'
+
+const [status, setStatus] = useState<ProblemStatus>('UNASSIGNED')
+
+const STATUS_OPTIONS = [
+  'UNASSIGNED',
+  'ASSIGNED',
+  'RESOLVED',
+  'FALSE_POSITIVE',
+] as const
 
 function ProblemDetail() {
+  const { id = '' } = useParams()
   const navigate = useNavigate()
-  const imgRef = useRef<HTMLImageElement | null>(null)
 
-  /** =====================
-   * 상태 (나중에 API로 교체)
-   * ===================== */
-  const [imageSrc] = useState<string>('') // 이미지 URL
-  const [items, setItems] = useState<DetectionItem[]>([])
-  const [scale, setScale] = useState({ x: 1, y: 1 })
-  const [selectedIdx, setSelectedIdx] = useState<number | null>(null)
-  const [openModal, setOpenModal] = useState(false)
+  const { data: problem, isLoading } = useProblemDetail(id)
 
-  /** =====================
-   * 이미지 스케일 계산
-   * ===================== */
+  const deleteMutation = useDeleteProblem()
+  const statusMutation = useUpdateProblemStatus(id)
+  const managerMutation = useUpdateProblemManager(id)
+
+  const [status, setStatus] = useState<ProblemStatus>('UNASSIGNED')
+  const [managerId, setManagerId] = useState<number>(0)
+
   useEffect(() => {
-    const img = imgRef.current
-    if (!img) return
-
-    const handleLoad = () => {
-      setScale({
-        x: img.clientWidth / img.naturalWidth,
-        y: img.clientHeight / img.naturalHeight,
-      })
+    if (problem) {
+      setStatus(problem.status)
+      setManagerId(problem.managerId ?? 0)
     }
+  }, [problem])
 
-    img.addEventListener('load', handleLoad)
-    return () => img.removeEventListener('load', handleLoad)
-  }, [])
+  if (isLoading || !problem) {
+    return <div className="p-6">로딩 중...</div>
+  }
 
   return (
     <div className="flex h-[calc(100vh-70px)]">
-      {/* 좌측: 이미지 + BBox */}
+      {/* 좌측: 이미지 / 분석 영역 */}
       <main className="flex-1 p-6 overflow-auto">
-        <button
+        <Button
+          variant="link"
+          className="px-0 mb-4"
           onClick={() => navigate(-1)}
-          className="mb-4 text-sm text-blue-500"
         >
           ← 목록으로
-        </button>
+        </Button>
 
-        <div className="relative inline-block max-h-[80vh] overflow-auto border bg-gray-100">
-          {imageSrc ? (
-            <img
-              ref={imgRef}
-              src={imageSrc}
-              className="block max-w-full"
-            />
-          ) : (
-            <div className="w-[800px] h-[450px] flex items-center justify-center text-gray-400">
-              이미지 영역
-            </div>
-          )}
-
-          {items.map((det, idx) => {
-            const [x1, y1, x2, y2] = det.bbox_xyxy
-
-            return (
-              <div
-                key={idx}
-                onClick={() => {
-                  setSelectedIdx(idx)
-                  setOpenModal(true)
-                }}
-                className={`absolute cursor-pointer border-2 ${
-                  selectedIdx === idx
-                    ? 'border-yellow-400'
-                    : 'border-red-500'
-                }`}
-                style={{
-                  left: x1 * scale.x,
-                  top: y1 * scale.y,
-                  width: (x2 - x1) * scale.x,
-                  height: (y2 - y1) * scale.y,
-                }}
-              >
-                <span className="absolute -top-7 left-0 bg-red-500/70 text-white text-xs px-1 whitespace-nowrap">
-                  {det.rail_type}_{det.cls_name}_{det.detail}
-                </span>
-              </div>
-            )
-          })}
-        </div>
+        <Card>
+          <CardContent className="h-[450px] flex items-center justify-center text-muted-foreground">
+            이미지 / BBox 영역 (연결 예정)
+          </CardContent>
+        </Card>
       </main>
 
       {/* 우측: 정보 패널 */}
-      <aside className="w-80 border-l p-6 bg-gray-50">
-        <h3 className="text-lg font-semibold mb-4">영상 정보</h3>
+      <aside className="w-[420px] border-l bg-muted/30 p-6 overflow-auto">
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center justify-between">
+              결함 정보
+              <Badge variant="outline">{problem.severity}</Badge>
+            </CardTitle>
+          </CardHeader>
 
-        <div className="flex flex-col gap-3 text-sm text-gray-600">
-          <Info label="파일명" value="-" />
-          <Info label="촬영 일시" value="-" />
-          <Info label="촬영 구간" value="-" />
+          <CardContent className="space-y-4 text-sm">
+            <Info label="결함 번호" value={problem.problemNum} />
+            <Info label="유형" value={problem.problemType} />
+            <Info label="노선" value={problem.railType} />
+            <Info
+              label="위치"
+              value={`${problem.latitude}, ${problem.longitude}`}
+            />
+            <Info
+              label="감지 시각"
+              value={new Date(
+                problem.detectedTime
+              ).toLocaleString()}
+            />
 
-          <div className="grid grid-cols-2 gap-2">
-            <Info label="해상도" value="-" />
-            <Info label="FPS" value="-" />
-          </div>
+            <Separator />
 
-          <div className="grid grid-cols-2 gap-2">
-            <Info label="날씨" value="-" />
-            <Info label="온도 / 습도" value="-" />
-          </div>
-
-          <Info label="영상 ID" value="-" />
-        </div>
-      </aside>
-
-      {/* 오탐 처리 모달 */}
-      {openModal && selectedIdx !== null && (
-        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-lg w-80 p-6">
-            <h2 className="text-lg font-semibold mb-4">오탐 처리</h2>
-
-            <p className="text-sm text-gray-700 mb-6">
-              오탐처리 하시겠습니까?
-            </p>
-
-            <div className="flex justify-end gap-2">
-              <button
-                className="px-3 py-1 text-sm border rounded"
-                onClick={() => {
-                  setOpenModal(false)
-                  setSelectedIdx(null)
+            {/* 상태 변경 */}
+            <div className="space-y-2">
+              <div className="text-xs text-muted-foreground">
+                상태 변경
+              </div>
+              <Select
+                value={status}
+                onValueChange={value => {
+                  const nextStatus = value as ProblemStatus
+                  setStatus(nextStatus)
+                  statusMutation.mutate(nextStatus)
                 }}
               >
-                아니오
-              </button>
-
-              <button
-                className="px-3 py-1 text-sm bg-red-500 text-white rounded"
-                onClick={() => {
-                  setItems(prev =>
-                    prev.filter((_, i) => i !== selectedIdx)
-                  )
-                  setOpenModal(false)
-                  setSelectedIdx(null)
-                }}
-              >
-                예
-              </button>
+                <SelectTrigger>
+                  <SelectValue placeholder="상태 선택" />
+                </SelectTrigger>
+                <SelectContent>
+                  {STATUS_OPTIONS.map(s => (
+                    <SelectItem key={s} value={s}>
+                      {s}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
-          </div>
-        </div>
-      )}
+
+            {/* 담당자 변경 */}
+            <div className="space-y-2">
+              <div className="text-xs text-muted-foreground">
+                담당자 ID
+              </div>
+              <div className="flex gap-2">
+                <Input
+                  type="number"
+                  value={managerId}
+                  onChange={e =>
+                    setManagerId(Number(e.target.value))
+                  }
+                />
+                <Button
+                  onClick={() =>
+                    managerMutation.mutate(managerId)
+                  }
+                >
+                  변경
+                </Button>
+              </div>
+            </div>
+
+            <Separator />
+
+            {/* 삭제 */}
+            <Button
+              variant="destructive"
+              className="w-full"
+              onClick={() => {
+                if (confirm('정말 삭제하시겠습니까?')) {
+                  deleteMutation.mutate(id, {
+                    onSuccess: () => navigate('/problems'),
+                  })
+                }
+              }}
+            >
+              결함 삭제
+            </Button>
+          </CardContent>
+        </Card>
+      </aside>
     </div>
   )
 }
 
+/** 공통 Info Row */
 function Info({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <div className="text-muted-foreground">{label}</div>
-      <div className="font-medium break-all">{value}</div>
+      <div className="text-xs text-muted-foreground">
+        {label}
+      </div>
+      <div className="font-medium break-all">
+        {value}
+      </div>
     </div>
   )
 }

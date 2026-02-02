@@ -24,17 +24,17 @@ const TestMap: React.FC = () => {
 
   const routeLayerRef = useRef<VectorLayer | null>(null)
   const stationLayerRef = useRef<VectorLayer | null>(null)
-  const defectLayerRef = useRef<VectorLayer | null>(null)
+  const problemLayerRef = useRef<VectorLayer | null>(null)
   const overlayRef = useRef<Overlay | null>(null)
 
   const [showRoute, setShowRoute] = useState(true)
   const [showStation, setShowStation] = useState(true)
-  const [showDefect, setShowDefect] = useState(true)
+  const [showProblem, setShowProblem] = useState(true)
 
   const navigate = useNavigate()
 
-  // 🔥 결함 GIS API
-  const { data: defectList } = useDashboardProblemGis()
+  // 결함 GIS API
+  const { data: problemList } = useDashboardProblemGis()
 
   const koreaExtent = fromLonLat([123, 32.0]).concat(
     fromLonLat([132.5, 38.5])
@@ -101,13 +101,13 @@ const TestMap: React.FC = () => {
    * 결함 레이어
    * ===================== */
   useEffect(() => {
-    if (!mapObj.current || !defectList) return
+    if (!mapObj.current || !problemList) return
 
-    if (defectLayerRef.current) {
-      mapObj.current.removeLayer(defectLayerRef.current)
+    if (problemLayerRef.current) {
+      mapObj.current.removeLayer(problemLayerRef.current)
     }
 
-    const features = defectList.map(
+    const features = problemList.map(
       (item) =>
         new Feature({
           geometry: new Point(
@@ -117,7 +117,7 @@ const TestMap: React.FC = () => {
         })
     )
 
-    const defectLayer = new VectorLayer({
+    const problemLayer = new VectorLayer({
       source: new VectorSource({ features }),
       style: new Style({
         image: new CircleStyle({
@@ -126,12 +126,12 @@ const TestMap: React.FC = () => {
           stroke: new Stroke({ color: "#ffffff", width: 1 }),
         }),
       }),
-      visible: showDefect,
+      visible: showProblem,
     })
 
-    defectLayerRef.current = defectLayer
-    mapObj.current.addLayer(defectLayer)
-  }, [defectList, showDefect])
+    problemLayerRef.current = problemLayer
+    mapObj.current.addLayer(problemLayer)
+  }, [problemList, showProblem])
 
   /** =====================
    * 클릭 Overlay
@@ -223,8 +223,8 @@ const TestMap: React.FC = () => {
   }, [showStation])
 
   useEffect(() => {
-    defectLayerRef.current?.setVisible(showDefect)
-  }, [showDefect])
+    problemLayerRef.current?.setVisible(showProblem)
+  }, [showProblem])
 
   return (
     <div style={{ width: "100%", height: "100vh", position: "relative" }}>
@@ -260,8 +260,8 @@ const TestMap: React.FC = () => {
         <label>
           <input
             type="checkbox"
-            checked={showDefect}
-            onChange={() => setShowDefect(!showDefect)}
+            checked={showProblem}
+            onChange={() => setShowProblem(!showProblem)}
           />{" "}
           결함
         </label>

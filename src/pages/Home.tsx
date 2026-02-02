@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 
 import TestMap from '@/components/map/OlMap'
-import DefectSummary from '@/components/Dashboard/ProblemSummary'
+import ProblemSummary from '@/components/Dashboard/ProblemSummary'
 import MonthlyProblemByTypeChart from '@/components/Dashboard/MonthlyProblemByTypeChart'
 import ProblemTrendChart from '@/components/Dashboard/ProblemTrendChart'
 
@@ -52,7 +52,7 @@ export default function Home() {
         style={{ width: asideWidth }}
         className="aside-scroll flex flex-col gap-4 overflow-y-auto border-r bg-background pt-4 pb-4 pr-4"
       >
-        <DefectSummary />
+        <ProblemSummary />
         <MonthlyProblemByTypeChart />
         <ProblemTrendChart />
       </aside>
