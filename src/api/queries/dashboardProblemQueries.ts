@@ -63,9 +63,7 @@ export const useDashboardProblemGis = () =>
   queryKey: DASHBOARD_PROBLEM_QUERY_KEY.gis(),
   queryFn: async () => {
     const res = await dashboardProblemApi.getGisList()
-    console.log('GIS Problems:', res.data)
     return res.data
   },
-  staleTime: 0, // ⭐ 추가
 })
 

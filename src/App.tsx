@@ -32,7 +32,7 @@ function App() {
           </Route>
 
           <Route path="/problems" element={<Problem />} />
-          <Route path="/problems/:problemDetectionId" element={<ProblemDetail />} />
+          <Route path="/problems/:id" element={<ProblemDetail />} />
           <Route path="/documents" element={<Document />} />
           <Route path="/documents/:documentId" element={<DocumentDetail />} />
 
