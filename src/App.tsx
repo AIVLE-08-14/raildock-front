@@ -9,8 +9,8 @@ import Home from './pages/Home'
 import Detect from './pages/Detect'
 import DetectUpload from './pages/DetectUpload'
 import DetectDetail from './pages/DetectDetail'
-import Report from './pages/Report'
-import ReportDetail from './pages/ReportDetail'
+import Problem from './pages/Problem'
+import ProblemDetail from './pages/ProblemDetail'
 import Document from './pages/Document'
 import DocumentDetail from './pages/DocumentDetail'
 import Auth from './pages/Auth'
@@ -31,8 +31,8 @@ function App() {
             <Route path="/detects/:detectionId" element={<DetectDetail />} />
           </Route>
 
-          <Route path="/reports" element={<Report />} />
-          <Route path="/reports/:problemDetectionId" element={<ReportDetail />} />
+          <Route path="/problems" element={<Problem />} />
+          <Route path="/problems/:problemDetectionId" element={<ProblemDetail />} />
           <Route path="/documents" element={<Document />} />
           <Route path="/documents/:documentId" element={<DocumentDetail />} />
 

@@ -44,8 +44,8 @@ export default function Header() {
           <Link to="/detects">결함 탐지</Link>
         </Button>
 
-        <Button asChild size="sm" variant={isActive('/reports') ? 'default' : 'ghost'}>
-          <Link to="/reports">결함 정보</Link>
+        <Button asChild size="sm" variant={isActive('/Problems') ? 'default' : 'ghost'}>
+          <Link to="/Problems">결함 정보</Link>
         </Button>
 
         <Button asChild size="sm" variant={isActive('/documents') ? 'default' : 'ghost'}>
