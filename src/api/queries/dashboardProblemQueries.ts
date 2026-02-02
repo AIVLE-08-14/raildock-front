@@ -60,9 +60,12 @@ export const useDashboardProblemByType = () =>
  */
 export const useDashboardProblemGis = () =>
   useQuery({
-    queryKey: DASHBOARD_PROBLEM_QUERY_KEY.gis(),
-    queryFn: async () => {
-      const res = await dashboardProblemApi.getGisList()
-      return res.data
-    },
-  })
+  queryKey: DASHBOARD_PROBLEM_QUERY_KEY.gis(),
+  queryFn: async () => {
+    const res = await dashboardProblemApi.getGisList()
+    console.log('GIS Problems:', res.data)
+    return res.data
+  },
+  staleTime: 0, // ⭐ 추가
+})
+

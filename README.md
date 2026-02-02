@@ -3,7 +3,6 @@
 ### 개발환경
 - React + Typescript + ReactCompiler + tailwindCSS + React-Query
 - *라이브러리*
-- KakaoMap API
 - 추가사항 있으면 여기에 적어주세요
 
 #### 실행 환경
@@ -12,7 +11,6 @@
 
 아래 내용 추가
 ```
-VITE_KAKAO_MAP_APP_KEY= 카카오맵 API 발급받아서 사용
 VITE_BACKEND_URL= 백엔드 URL 
 ```
 

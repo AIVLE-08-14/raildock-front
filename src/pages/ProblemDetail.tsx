@@ -11,7 +11,7 @@ type DetectionItem = {
   confidence: number
 }
 
-function ReportDetail() {
+function ProblemDetail() {
   const navigate = useNavigate()
   const imgRef = useRef<HTMLImageElement | null>(null)
 
@@ -170,4 +170,4 @@ function Info({ label, value }: { label: string; value: string }) {
   )
 }
 
-export default ReportDetail
+export default ProblemDetail
