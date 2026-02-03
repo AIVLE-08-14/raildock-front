@@ -44,8 +44,10 @@ export interface ProblemDetail extends ProblemSimple {
   temperature?: number
   humidity?: number
   managerId?: number
-  sourceImageId?: string
-  boundingBoxJsonId?: string
+  sourceImageIdURL?: string
+  boundingBoxJsonIdURL?: string
+  recommendedActions?: string
+  problemStatus?: string
 }
 
 /** =====================
@@ -67,8 +69,8 @@ export interface CreateProblemParams {
   temperature?: number
   humidity?: number
   detectedTime: string
-  sourceImageId?: string
-  boundingBoxJsonId?: string
+  sourceImageIdURL?: string
+  boundingBoxJsonIdURL?: string
 }
 
 export interface UpdateProblemParams {
