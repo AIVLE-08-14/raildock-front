@@ -22,9 +22,9 @@ const TestMap: React.FC = () => {
   const mapRef = useRef<HTMLDivElement | null>(null)
   const mapObj = useRef<Map | null>(null)
 
-  const routeLayerRef = useRef<VectorLayer | null>(null)
-  const stationLayerRef = useRef<VectorLayer | null>(null)
-  const problemLayerRef = useRef<VectorLayer | null>(null)
+  const routeLayerRef = useRef<VectorLayer<VectorSource> | null>(null)
+  const stationLayerRef = useRef<VectorLayer<VectorSource> | null>(null)
+  const problemLayerRef = useRef<VectorLayer<VectorSource> | null>(null)
   const overlayRef = useRef<Overlay | null>(null)
 
   const [showRoute, setShowRoute] = useState(true)
@@ -32,8 +32,6 @@ const TestMap: React.FC = () => {
   const [showProblem, setShowProblem] = useState(true)
 
   const navigate = useNavigate()
-
-  // 결함 GIS API
   const { data: problemList } = useDashboardProblemGis()
 
   const koreaExtent = fromLonLat([123, 32.0]).concat(
@@ -59,6 +57,7 @@ const TestMap: React.FC = () => {
     routeLayerRef.current = routeLayer
 
     const stationLayer = new VectorLayer({
+      declutter: true,
       source: new VectorSource({
         url: "/data/Rail_route_station_2023.geojson",
         format: new GeoJSON(),
@@ -87,6 +86,8 @@ const TestMap: React.FC = () => {
         minZoom: 4,
         maxZoom: 18,
         extent: koreaExtent,
+        smoothExtentConstraint: false,
+        smoothResolutionConstraint: false,
       }),
     })
 
@@ -98,14 +99,39 @@ const TestMap: React.FC = () => {
   }, [])
 
   /** =====================
-   * 결함 레이어
+   * 결함 레이어 (1회 생성)
    * ===================== */
   useEffect(() => {
-    if (!mapObj.current || !problemList) return
+    if (!mapObj.current) return
 
-    if (problemLayerRef.current) {
-      mapObj.current.removeLayer(problemLayerRef.current)
-    }
+    const source = new VectorSource()
+
+    const layer = new VectorLayer({
+      source,
+      style: new Style({
+        image: new CircleStyle({
+          radius: 6,
+          fill: new Fill({ color: "#ff4d4f" }),
+          stroke: new Stroke({ color: "#ffffff", width: 1 }),
+        }),
+      }),
+      visible: showProblem,
+    })
+
+    problemLayerRef.current = layer
+    mapObj.current.addLayer(layer)
+  }, [])
+
+  /** =====================
+   * 결함 데이터 갱신
+   * ===================== */
+  useEffect(() => {
+    if (!problemLayerRef.current || !problemList) return
+
+    const source = problemLayerRef.current.getSource()
+    if (!source) return
+
+    source.clear()
 
     const features = problemList.map(
       (item) =>
@@ -117,21 +143,8 @@ const TestMap: React.FC = () => {
         })
     )
 
-    const problemLayer = new VectorLayer({
-      source: new VectorSource({ features }),
-      style: new Style({
-        image: new CircleStyle({
-          radius: 6,
-          fill: new Fill({ color: "#ff4d4f" }),
-          stroke: new Stroke({ color: "#ffffff", width: 1 }),
-        }),
-      }),
-      visible: showProblem,
-    })
-
-    problemLayerRef.current = problemLayer
-    mapObj.current.addLayer(problemLayer)
-  }, [problemList, showProblem])
+    source.addFeatures(features)
+  }, [problemList])
 
   /** =====================
    * 클릭 Overlay
@@ -160,7 +173,7 @@ const TestMap: React.FC = () => {
 
     const map = mapObj.current
 
-    map.on("singleclick", (evt) => {
+    const clickHandler = (evt: any) => {
       const feature = map.forEachFeatureAtPixel(
         evt.pixel,
         (f) => f
@@ -201,12 +214,14 @@ const TestMap: React.FC = () => {
           }
         })
       } else {
-        // 빈 곳 클릭 → 오버레이 닫기
         overlay.setPosition(undefined)
       }
-    })
+    }
+
+    map.on("singleclick", clickHandler)
 
     return () => {
+      map.un("singleclick", clickHandler)
       map.removeOverlay(overlay)
     }
   }, [navigate])
