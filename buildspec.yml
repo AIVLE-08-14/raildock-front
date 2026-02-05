@@ -3,7 +3,7 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      nodejs: 20
+      nodejs: 22
     commands:
       - echo "Node version"
       - node -v
@@ -13,6 +13,8 @@ phases:
 
   build:
     commands:
+      - echo "Inject Vite env"
+      - echo "VITE_BACKEND_URL=$VITE_BACKEND_URL" > .env.production
       - echo "TypeScript build + Vite build"
       - npm run build
 
