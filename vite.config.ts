@@ -24,7 +24,7 @@ export default defineConfig({
         target: "http://3.35.8.146:8080",
         changeOrigin: true,
         secure: false,
-        rewrite: (path) => path.replace(/^\/api/, ""),
+        // rewrite: (path) => path.replace(/^\/api/, ""), // path 변경하는 라우팅 삭제
       },
     },
   },
