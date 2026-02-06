@@ -1,0 +1,28 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 22
+    commands:
+      - echo "Node version"
+      - node -v
+      - npm -v
+      - echo "Installing dependencies"
+      - npm ci
+
+  build:
+    commands:
+      - echo "Inject Vite env"
+      - echo "VITE_BACKEND_URL=$VITE_BACKEND_URL" > .env.production
+      - echo "TypeScript build + Vite build"
+      - npm run build
+
+  post_build:
+    commands:
+      - echo "Build completed"
+
+artifacts:
+  files:
+    - '**/*'
+  base-directory: dist
