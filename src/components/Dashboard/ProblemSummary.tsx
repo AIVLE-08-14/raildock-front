@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom'
 import {
   useDashboardProblemStatus,
   useDashboardRecentProblems,
@@ -13,6 +14,7 @@ import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 
 export default function ProblemSummary() {
+  const navigate = useNavigate()
   const { data: status } = useDashboardProblemStatus()
   const { data: recentProblems } = useDashboardRecentProblems()
 
@@ -26,18 +28,14 @@ export default function ProblemSummary() {
         {/* 상태 요약 */}
         <div className="grid grid-cols-2 gap-4">
           <div className="rounded-lg bg-muted/40 p-4 text-center">
-            <p className="text-sm text-muted-foreground">
-              미배정
-            </p>
+            <p className="text-sm text-muted-foreground">미배정</p>
             <p className="mt-1 text-3xl font-bold text-destructive">
               {status?.unassignedCount ?? 0}
             </p>
           </div>
 
           <div className="rounded-lg bg-muted/40 p-4 text-center">
-            <p className="text-sm text-muted-foreground">
-              배정
-            </p>
+            <p className="text-sm text-muted-foreground">배정</p>
             <p className="mt-1 text-3xl font-bold text-primary">
               {status?.assignedCount ?? 0}
             </p>
@@ -53,10 +51,11 @@ export default function ProblemSummary() {
           </h3>
 
           <ul className="space-y-2">
-            {recentProblems?.map(problem => (
+            {recentProblems?.map((problem) => (
               <li
                 key={problem.id}
-                className="flex items-center justify-between rounded-md border px-3 py-2"
+                className="flex items-center justify-between rounded-md border px-3 py-2 cursor-pointer hover:bg-muted/20 transition-colors"
+                onClick={() => navigate(`/problems/${problem.id}`)}
               >
                 <div className="flex flex-col">
                   <span className="text-sm font-medium">
@@ -68,9 +67,7 @@ export default function ProblemSummary() {
                 </div>
 
                 <div className="flex gap-2">
-                  <Badge variant="outline">
-                    {problem.severity}
-                  </Badge>
+                  <Badge variant="outline">{problem.severity}</Badge>
 
                   <Badge
                     variant={
@@ -79,9 +76,7 @@ export default function ProblemSummary() {
                         : 'secondary'
                     }
                   >
-                    {problem.status === 'UNASSIGNED'
-                      ? '미배정'
-                      : '배정'}
+                    {problem.status === 'UNASSIGNED' ? '미배정' : '배정'}
                   </Badge>
                 </div>
               </li>
