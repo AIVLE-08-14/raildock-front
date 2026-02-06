@@ -11,7 +11,7 @@ import imgLoginVisual from '@/assets/images/LoginImage.png'
 import logo from '@/assets/icons/logo.svg'
 import LoginForm from '@/components/auth/loginForm'
 import SignupForm from '@/components/auth/signupForm'
-import AgreementModal from './../components/auth/AgreementModal';
+import AgreementModal from '@/components/auth/AgreementModal';
 
 type AuthMode = 'login' | 'signup'
 
@@ -91,13 +91,13 @@ export default function Auth() {
       <AgreementModal
         open={openTerms}        
         onClose={() => setOpenTerms(false)}
-        mdPath="/src/assets/contents/terms.md"
+        mdPath="/contents/terms.md"
       />
 
       <AgreementModal
         open={openPrivacy}
         onClose={() => setOpenPrivacy(false)}
-        mdPath="/src/assets/contents/policy.md"
+        mdPath="/contents/policy.md"
       />
     </div>
   )
