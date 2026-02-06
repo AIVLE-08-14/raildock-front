@@ -46,7 +46,12 @@ export default function DetectUpload() {
         const json = JSON.parse(text.toString())
 
         // JSON 값을 폼에 반영
-        setRecordedAt(json.datetime?.replace(' ', 'T') || '')
+        if (json.datetime) {
+          const formatted = json.datetime.replace(/\//g, '-').replace(' ', 'T').slice(0, 16)
+          setRecordedAt(formatted)
+        } else {
+          setRecordedAt('')
+        }
         setLocation(json.region_name || '')
         setWeather(json.weather || '')
         setTemperature(
