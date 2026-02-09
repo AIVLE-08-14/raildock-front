@@ -62,13 +62,14 @@ export interface DetectDetail {
 
 // 생성 (업로드)
 export interface CreateDetectParams {
-  name?: string
-  datetime?: string
-  section?: string
-  direction?: string
-  weather?: string
-  temperature?: number
-  humidity?: number
+  name: string
+
+  files: {
+    metadata: File
+    insulatorVideo?: File
+    railVideo?: File
+    nestVideo?: File
+  }
 }
 
 export interface CreateDetectResponse {

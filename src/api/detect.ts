@@ -46,27 +46,25 @@ export const detectApi = {
   ): Promise<CreateDetectResponse> {
     const formData = new FormData()
 
-    Object.entries(params).forEach(([key, value]) => {
-      if (value === undefined || value === null) return
-
-      if (value instanceof Date) {
-        formData.append(key, value.toISOString())
-      } else {
-        formData.append(key, String(value))
-      }
-    })
-
-    if (files.metadata) formData.append('metadata', files.metadata)
-    if (files.insulatorVideo)
+    if (files.metadata) {
+      formData.append('metadata', files.metadata)
+    }
+    if (files.insulatorVideo) {
       formData.append('insulatorVideo', files.insulatorVideo)
-    if (files.railVideo)
+    }
+    if (files.railVideo) {
       formData.append('railVideo', files.railVideo)
-    if (files.nestVideo)
+    }
+    if (files.nestVideo) {
       formData.append('nestVideo', files.nestVideo)
+    }
 
     const res = await apiClient.post<CreateDetectResponse>(
       '/detect',
-      formData
+      formData,
+      {
+        params: { name: params.name },
+      }
     )
 
     return res.data
