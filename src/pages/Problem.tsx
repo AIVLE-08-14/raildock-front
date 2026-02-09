@@ -184,14 +184,6 @@ function Problem() {
  * Problem Card
  * ===================== */
 function ProblemCard({ problem }: { problem: ProblemSimple }) {
-  /** Severity 텍스트 변환 */
-  const severityTextMap: Record<string, string> = {
-    S: '위험',
-    O: '주의',
-    X1: '보통',
-    X2: '낮음',
-  }
-
   return (
     <Link to={`/problems/${problem.id}`}>
       <Card className="hover:shadow-md transition cursor-pointer py-1">
