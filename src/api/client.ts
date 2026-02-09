@@ -7,9 +7,6 @@ export const apiClient = axios.create({
   baseURL: isDev ? '/api' : import.meta.env.VITE_Backend_URL,
   withCredentials: true, // 세션 인증 유지
   timeout: 10000,
-  headers: {
-    'Content-Type': 'application/json',
-  },
 })
 
 apiClient.interceptors.response.use(

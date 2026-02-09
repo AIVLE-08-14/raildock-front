@@ -54,9 +54,8 @@ export function useCreateDetect() {
   return useMutation<
     CreateDetectResponse,
     Error,
-    {
-      params: CreateDetectParams
-      files: {
+    CreateDetectParams & {
+      files?: {
         metadata?: File
         insulatorVideo?: File
         railVideo?: File
@@ -64,7 +63,7 @@ export function useCreateDetect() {
       }
     }
   >({
-    mutationFn: ({ params, files }) =>
-      detectApi.create(params, files),
+    mutationFn: ({ files, ...params }) =>
+      detectApi.create({ ...params, files: files || {} }, files || {}),
   })
 }

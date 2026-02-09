@@ -19,7 +19,7 @@ export default function ProblemSummary() {
   const { data: recentProblems } = useDashboardRecentProblems()
 
   return (
-    <Card className="h-full">
+    <Card className="overflow-visible">
       <CardHeader>
         <CardTitle>결함 요약</CardTitle>
       </CardHeader>
@@ -45,12 +45,12 @@ export default function ProblemSummary() {
         <Separator />
 
         {/* 최근 결함 */}
-        <div>
+        <div className='h-full'>
           <h3 className="mb-3 text-sm font-semibold">
             신규 결함 (최근 10건)
           </h3>
 
-          <ul className="space-y-2">
+          <ul className="space-y-2 h-full overflow-y-auto">
             {recentProblems?.map((problem) => (
               <li
                 key={problem.id}
