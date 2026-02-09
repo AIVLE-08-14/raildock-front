@@ -1,5 +1,7 @@
 // src/types/detect.ts
 export type DetectCategory = 'rail' | 'insulator' | 'nest'
+export type VideoTaskStatus = 'PENDING' | 'RUNNING' | 'COMPLETED' | 'FAILED'
+export type LlmTaskStatus = 'PENDING' | 'RUNNING' | 'COMPLETED' | 'FAILED'
 
 // 결함 리스트
 export interface DetectListItem {
@@ -8,7 +10,7 @@ export interface DetectListItem {
   section: string
   datetime: string
   direction: string
-  taskStatus: string
+  taskStatus: VideoTaskStatus
 }
 
 export interface DetectListResponse {
@@ -39,15 +41,30 @@ export interface DetectResult {
   imageUrls: string[]
 }
 
+export interface DetectProblem {
+  id: string // UUID
+  problemNum: string
+  problemType: string
+  model: 'INSULATOR' | 'RAIL' | 'NEST' | string
+  severity: string
+  status: string
+  railType: string
+  latitude: number
+  longitude: number
+  detectedTime: string // ISO datetime
+}
+
+export interface DetectProblems {
+  insulator: DetectProblem[]
+  rail: DetectProblem[]
+  nest: DetectProblem[]
+}
+
 export interface DetectDetail {
   id: number
   name: string
-  section: string
-  datetime: string
-  direction: string
-  weather?: string
-  temperature?: number
-  humidity?: number
+  createdAt: string
+  updatedAt: string
 
   metadataUrl?: string
 
@@ -55,9 +72,17 @@ export interface DetectDetail {
   railVideoUrl?: string
   nestVideoUrl?: string
 
-  taskStatus: string
-  errorMessage?: string
-  resultZipUrl?: string
+  videoTaskStatus: VideoTaskStatus
+  taskErrorMessage?: string
+  videoResultZipUrl?: string
+
+  llmTaskStatus?: LlmTaskStatus
+
+  insulatorReportUrl?: string
+  railReportUrl?: string
+  nestReportUrl?: string
+
+  problems: DetectProblems
 }
 
 // 생성 (업로드)
