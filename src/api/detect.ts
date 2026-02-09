@@ -1,5 +1,3 @@
-// src/api/detect.ts
-
 import { apiClient } from '@/api/client'
 import type {
   DetectListResponse,
@@ -8,9 +6,10 @@ import type {
   CreateDetectResponse,
 } from '@/types/detect'
 
-// 결함 탐지 API
 export const detectApi = {
-  // 결함 탐지 목록 조회
+  // =======================
+  // 결함 목록
+  // =======================
   async getList(
     page = 0,
     size = 20
@@ -24,7 +23,9 @@ export const detectApi = {
     }
   },
 
-  // 결함 탐지 상세 조회
+  // =======================
+  // 결함 상세
+  // =======================
   async getDetail(
     problemDetectionId: number
   ): Promise<DetectDetail> {
@@ -34,7 +35,9 @@ export const detectApi = {
     return res.data
   },
 
-  // 결함 탐지 생성 (영상 업로드)
+  // =======================
+  // 결함 생성
+  // =======================
   async create(
     params: CreateDetectParams,
     files: {
