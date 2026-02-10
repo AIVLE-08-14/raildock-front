@@ -284,12 +284,14 @@ function ProblemDetail() {
 
         {/* 이미지 + BBox */}
         <Card>
-          <BBoxCanvas
-            imageUrl={problem.sourceImageIdURL}
-            detections={draft}
-            editable={isEditMode}
-            onDelete={handleDeleteBBox}
-            />
+          <div className="pl-6">
+            <BBoxCanvas
+              imageUrl={problem.sourceImageIdURL}
+              detections={draft}
+              editable={isEditMode}
+              onDelete={handleDeleteBBox}
+              />
+          </div>
         </Card>
       </main>
 
