@@ -44,12 +44,12 @@ export default function Header() {
           <Link to="/detects">결함 탐지</Link>
         </Button>
 
-        <Button asChild size="sm" variant={isActive('/Problems') ? 'default' : 'ghost'}>
-          <Link to="/Problems">결함 정보</Link>
+        <Button asChild size="sm" variant={isActive('/problems') ? 'default' : 'ghost'}>
+          <Link to="/problems">결함 정보</Link>
         </Button>
 
         <Button asChild size="sm" variant={isActive('/documents') ? 'default' : 'ghost'}>
-          <Link to="/documents">유지보수 문서</Link>
+          <Link to="/documents">유지보수 지침</Link>
         </Button>
 
         {/* 우측 영역 */}

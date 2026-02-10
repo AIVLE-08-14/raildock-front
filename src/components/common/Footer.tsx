@@ -3,7 +3,7 @@ import { Link } from "react-router-dom"
 
 export default function Footer() {
   return (
-    <footer className="border-t bg-gray-50">
+    <footer className="border-t bg-gray-50 z-10">
       <div className="max-w-6xl mx-auto px-4 py-4 text-sm text-gray-500 flex justify-between items-center">
         <span>© 2026 Raildock. All rights reserved.</span>
 

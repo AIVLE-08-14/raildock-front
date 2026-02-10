@@ -51,7 +51,7 @@ function DetectSidebar() {
 
 export default function DetectLayout() {
   return (
-    <div className="flex h-[calc(100vh-70px)]">
+    <div className="flex h-[calc(100vh-124px)]">
       <DetectSidebar />
       <main className="flex-1 overflow-auto">
         <Outlet />

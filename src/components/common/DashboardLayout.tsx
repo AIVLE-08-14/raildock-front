@@ -1,6 +1,5 @@
 import { useState } from "react"
 import Header from "./Header"
-import Footer from "./Footer"
 import ChatbotPanel from "@/components/chatbot/ChatbotPanel"
 import ChatbotToggle from "@/components/chatbot/ChatbotToggle"
 import { Outlet } from 'react-router-dom'
@@ -12,12 +11,9 @@ export default function Layout() {
     <div className="min-h-screen flex flex-col">
       <Header />
 
-      {/* 핵심 */}
-      <main className="flex-1 w-full overflow-y-auto px-0">
-        <Outlet />
+      <main className="flex-1 w-full px-4">
+         <Outlet />
       </main>
-
-      <Footer />
 
       {/* 챗봇 */}
       <ChatbotPanel
@@ -31,4 +27,3 @@ export default function Layout() {
     </div>
   )
 }
-

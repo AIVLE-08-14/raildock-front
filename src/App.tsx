@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom'
 
 import Layout from './components/common/Layout'
+import DashboardLayout from './components/common/DashboardLayout'
 import DetectLayout from './components/common/DetectLayout'
 
 import ProtectedRoute from './components/common/ProtectedRoute'
@@ -14,14 +15,16 @@ import ProblemDetail from './pages/ProblemDetail'
 import Document from './pages/Document'
 import DocumentDetail from './pages/DocumentDetail'
 import Auth from './pages/Auth'
-import Test from './pages/test'
 
 function App() {
   return (
     <Routes>
       <Route path="/auth" element={<Auth />} />
 
-      <Route element={<ProtectedRoute />}>
+        <Route element={<ProtectedRoute />}>
+          <Route element={<DashboardLayout />}>
+        </Route>
+        
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
 
@@ -31,14 +34,13 @@ function App() {
             <Route path="/detects/:detectionId" element={<DetectDetail />} />
           </Route>
 
-          <Route path="/problems" element={<Problem />} />
-          <Route path="/problems/:id" element={<ProblemDetail />} />
           <Route path="/documents" element={<Document />} />
           <Route path="/documents/:documentId" element={<DocumentDetail />} />
 
-          <Route path="/test" element={<Test />}/>
-
+                    <Route path="/problems" element={<Problem />} />
+                    <Route path="/problems/:id" element={<ProblemDetail />} />
         </Route>
+
       </Route>
     </Routes>
   )
