@@ -16,8 +16,8 @@ dist
 dist-ssr
 *.local
 
-# Large / generated data files
-public/data/Rail_route_2023.geojson
+## Large / generated data files
+## public/data/Rail_route_2023.geojson
 
 # Editor directories and files
 .vscode/*
