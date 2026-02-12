@@ -11,10 +11,9 @@ export default function Layout() {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
-
-      {/* 핵심 */}
-      <main className="h-[calc(100vh-124px)] flex-1 w-full overflow-y-auto px-0">
-        <Outlet />
+    
+      <main className="flex-1 w-full px-4">
+         <Outlet />
       </main>
 
       <Footer />
@@ -31,4 +30,3 @@ export default function Layout() {
     </div>
   )
 }
-

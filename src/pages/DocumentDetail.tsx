@@ -68,7 +68,7 @@ function DocumentDetail() {
   }
 
   return (
-    <div className="p-6 max-w-7xl mx-auto">
+    <div className="p-6 max-w-7xl mx-auto space-y-6">
       {/* 헤더 */}
       <div className="flex justify-between items-start mb-4">
         <div>
@@ -123,7 +123,7 @@ function DocumentDetail() {
         <div className="col-span-3 bg-white rounded-xl shadow">
           <iframe
             src={iframeSrc}
-            className="w-full h-[80vh] rounded-xl"
+            className="w-full h-[78vh] rounded-xl"
             title="document-pdf"
           />
         </div>

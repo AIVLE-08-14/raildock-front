@@ -19,14 +19,10 @@ import {
 } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
 
-/** =====================
- * Pagination Config
- * ===================== */
+//Pagination Config
 const PAGE_SIZE = 10
 
-/** =====================
- * 문제 타입 목록
- * ===================== */
+//Problem Type List
 const problemTypes = [
   // ===== 선로 =====
   { key: '선로(전체)', group: 'RAIL', isGroup: true },
@@ -48,9 +44,7 @@ function Problem() {
   const { data: problems, isLoading } = useProblemList()
   const [page, setPage] = useState(1)
 
-  /** =====================
-   * 필터 상태
-   * ===================== */
+  //Filtering 상태
   const [filterStatus, setFilterStatus] = useState<string>('ALL')
   const [filterSeverity, setFilterSeverity] = useState<string>('ALL')
   const [filterProblemType, setFilterProblemType] = useState<string>('ALL')
@@ -68,9 +62,7 @@ function Problem() {
     )
   }
 
-  /** =====================
-   * 필터링 적용
-   * ===================== */
+  //Filtering 적용
   const filteredProblems = useMemo(() => {
     return problems.filter((p) => {
       const statusMatch =
@@ -180,9 +172,7 @@ function Problem() {
   )
 }
 
-/** =====================
- * Problem Card
- * ===================== */
+//Problem Card
 function ProblemCard({ problem }: { problem: ProblemSimple }) {
   return (
     <Link to={`/problems/${problem.id}`}>
@@ -218,9 +208,7 @@ function ProblemCard({ problem }: { problem: ProblemSimple }) {
   )
 }
 
-/** =====================
- * Pagination Component
- * ===================== */
+//Pagination Component
 function Pagination({
   page,
   totalPages,
@@ -269,9 +257,7 @@ function Pagination({
   )
 }
 
-/** =====================
- * Badges
- * ===================== */
+//Badges
 function StatusBadge({ status }: { status: string }) {
   const map: Record<string, string> = {
     UNASSIGNED: 'destructive',

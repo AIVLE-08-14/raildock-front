@@ -28,9 +28,7 @@ export default function DetectDetail() {
   }
 
   const {
-    id,
     name,
-    createdAt,
     updatedAt,
     metadataUrl,
     insulatorVideoUrl,
@@ -50,69 +48,86 @@ export default function DetectDetail() {
       {/* 좌측 : 영상 */}
       <div className="flex-1 p-6 overflow-auto">
         <div className="flex items-center justify-between pb-2">
-          <h2 className="text-xl font-semibold mb-6">
-            결함 탐지 결과
-          </h2>
-          <div className='grid grid-cols-2 gap-6'>
+          <div>
+            <h2 className="text-xl font-semibold mb-1">{name}</h2>
+            <p className="text-sm text-muted-foreground">{updatedAt}</p>
+          </div>
+
+          <div className='grid grid-cols-4 gap-6'>
+            <Info label="Metadata URL" value={metadataUrl} />
+            <Info label="결과 ZIP" value={videoResultZipUrl} />
             <Info label="Video Task 상태" value={videoTaskStatus} />
             <Info label="LLM Task 상태" value={llmTaskStatus} />
 
           </div>
         </div>
 
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-4">
           <VideoCard label="선로" url={railVideoUrl} />
           <VideoCard label="애자" url={insulatorVideoUrl} />
           <VideoCard label="둥지" url={nestVideoUrl} />
         </div>
 
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-4">
+          <Card className='py-1'>
+            <CardContent className="p-4 space-y-3">
+              <h4 className="font-semibold">선로 리포트</h4>
+              {railReportUrl && (
+                <a
+                  href={railReportUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 underline"
+                >
+                  선로 리포트 보기
+                </a>
+              )}
+            </CardContent>
+          </Card>
+          <Card className='py-1'>
+            <CardContent className="p-4 space-y-3">
+              <h4 className="font-semibold">애자 리포트</h4>
+              {insulatorReportUrl && (
+                <a
+                  href={insulatorReportUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 underline"
+                >
+                  애자 리포트 보기
+                </a>
+              )}
+            </CardContent>
+          </Card>
+          <Card className='py-1'>
+            <CardContent className="p-4 space-y-3">
+              <h4 className="font-semibold">둥지 리포트</h4>
+              {nestReportUrl && (
+                <a
+                  href={nestReportUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 underline"
+                >
+                  둥지 리포트 보기
+                </a>
+              )}
+            </CardContent>
+          </Card>
+        </div>
+
         {/* 문제 목록 */}
-        <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-4">
           <ProblemSection title="선로 결함" items={problems.rail} />
           <ProblemSection title="애자 결함" items={problems.insulator} />
           <ProblemSection title="둥지 결함" items={problems.nest} />
         </section>
       </div>
-
-      {/* 우측 : 메타 / 상태 */}
-      <aside className="w-96 border-l p-6 bg-gray-50 overflow-auto">
-        <h3 className="text-lg font-semibold mb-4">
-          작업 정보
-        </h3>
-
-        <div className="flex flex-col gap-3 text-sm">
-          <Info label="Detection ID" value={id} />
-          <Info label="이름" value={name} />
-          <Info label="생성 시각" value={createdAt} />
-          <Info label="업데이트 시각" value={updatedAt} />
-
-          <Divider />
-
-          <Info label="Metadata URL" value={metadataUrl} />
-          <Info label="결과 ZIP" value={videoResultZipUrl} />
-
-          <Divider />
-
-          <Info label="선로 영상" value={railVideoUrl} />
-          <Info label="애자 영상" value={insulatorVideoUrl} />
-          <Info label="둥지 영상" value={nestVideoUrl} />
-
-          <Divider />
-
-          <Info label="선로 리포트" value={railReportUrl} />
-          <Info label="애자 리포트" value={insulatorReportUrl} />
-          <Info label="둥지 리포트" value={nestReportUrl} />
-        </div>
-      </aside>
     </div>
   )
 }
 
-/* =======================
-   하위 컴포넌트
-======================= */
-
+//하위 컴포넌트
 function VideoCard({
   label,
   url,
@@ -123,7 +138,7 @@ function VideoCard({
   if (!url) return null
 
   return (
-    <Card>
+    <Card className='py-0'>
       <CardContent className="p-3 flex flex-col gap-3">
         <div className="flex items-center justify-between">
           <Badge variant="secondary">{label}</Badge>
@@ -148,10 +163,9 @@ function ProblemSection({
   if (!items.length) return null
 
   return (
-    <Card>
+    <Card className='py-1'>
       <CardContent className="p-4 space-y-3">
-        <h4 className="font-semibold">{title}</h4>
-
+          <h4 className="font-semibold">{title} - {items.length}건</h4>
         <div className="space-y-2 text-sm">
           {items.map((p) => (
             <div
@@ -221,6 +235,3 @@ function Info({
   )
 }
 
-function Divider() {
-  return <div className="border-t my-2" />
-}

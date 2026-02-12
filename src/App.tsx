@@ -14,31 +14,25 @@ import ProblemDetail from './pages/ProblemDetail'
 import Document from './pages/Document'
 import DocumentDetail from './pages/DocumentDetail'
 import Auth from './pages/Auth'
-import Test from './pages/test'
 
 function App() {
   return (
     <Routes>
       <Route path="/auth" element={<Auth />} />
-
-      <Route element={<ProtectedRoute />}>
-        <Route element={<Layout />}>
-          <Route path="/" element={<Home />} />
-
-          <Route path="/detects" element={<DetectLayout />}>
-            <Route path="/detects" element={<Detect />} />
-            <Route path="/detects/upload" element={<DetectUpload />} />
-            <Route path="/detects/:detectionId" element={<DetectDetail />} />
+        <Route element={<ProtectedRoute />}>
+          <Route element={<Layout />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/documents" element={<Document />} />
+            <Route path="/documents/:documentId" element={<DocumentDetail />} />
+            <Route path="/problems" element={<Problem />} />
+            <Route path="/problems/:id" element={<ProblemDetail />} />
+            <Route path="/detects" element={<DetectLayout />}>
+              <Route path="/detects" element={<Detect />} />
+              <Route path="/detects/upload" element={<DetectUpload />} />
+              <Route path="/detects/:detectionId" element={<DetectDetail />} />
+            </Route>
           </Route>
 
-          <Route path="/problems" element={<Problem />} />
-          <Route path="/problems/:id" element={<ProblemDetail />} />
-          <Route path="/documents" element={<Document />} />
-          <Route path="/documents/:documentId" element={<DocumentDetail />} />
-
-          <Route path="/test" element={<Test />}/>
-
-        </Route>
       </Route>
     </Routes>
   )
