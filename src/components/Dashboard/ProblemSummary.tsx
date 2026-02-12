@@ -13,6 +13,13 @@ import {
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 
+const SEVERITY_MAP: Record<string, string> = {
+  S: '위험',
+  O: '주의',
+  X1: '보통',
+  X2: '낮음',
+}
+
 export default function ProblemSummary() {
   const navigate = useNavigate()
   const { data: status } = useDashboardProblemStatus()
@@ -67,7 +74,7 @@ export default function ProblemSummary() {
                 </div>
 
                 <div className="flex gap-2">
-                  <Badge variant="outline">{problem.severity}</Badge>
+                  <Badge variant="outline">{SEVERITY_MAP[problem.severity] ?? problem.severity}</Badge>
 
                   <Badge
                     variant={

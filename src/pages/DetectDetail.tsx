@@ -127,10 +127,7 @@ export default function DetectDetail() {
   )
 }
 
-/* =======================
-   하위 컴포넌트
-======================= */
-
+//하위 컴포넌트
 function VideoCard({
   label,
   url,
@@ -238,6 +235,3 @@ function Info({
   )
 }
 
-function Divider() {
-  return <div className="border-t my-2" />
-}

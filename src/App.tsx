@@ -37,7 +37,7 @@ function App() {
           <Route path="/documents" element={<Document />} />
           <Route path="/documents/:documentId" element={<DocumentDetail />} />
 
-                    <Route path="/problems" element={<Problem />} />
+          <Route path="/problems" element={<Problem />} />
                     <Route path="/problems/:id" element={<ProblemDetail />} />
         </Route>
 
