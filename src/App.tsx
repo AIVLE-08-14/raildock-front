@@ -1,7 +1,6 @@
 import { Routes, Route } from 'react-router-dom'
 
 import Layout from './components/common/Layout'
-import DashboardLayout from './components/common/DashboardLayout'
 import DetectLayout from './components/common/DetectLayout'
 
 import ProtectedRoute from './components/common/ProtectedRoute'
@@ -20,26 +19,19 @@ function App() {
   return (
     <Routes>
       <Route path="/auth" element={<Auth />} />
-
         <Route element={<ProtectedRoute />}>
-          <Route element={<DashboardLayout />}>
-        </Route>
-        
-        <Route element={<Layout />}>
-          <Route path="/" element={<Home />} />
-
-          <Route path="/detects" element={<DetectLayout />}>
-            <Route path="/detects" element={<Detect />} />
-            <Route path="/detects/upload" element={<DetectUpload />} />
-            <Route path="/detects/:detectionId" element={<DetectDetail />} />
+          <Route element={<Layout />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/documents" element={<Document />} />
+            <Route path="/documents/:documentId" element={<DocumentDetail />} />
+            <Route path="/problems" element={<Problem />} />
+            <Route path="/problems/:id" element={<ProblemDetail />} />
+            <Route path="/detects" element={<DetectLayout />}>
+              <Route path="/detects" element={<Detect />} />
+              <Route path="/detects/upload" element={<DetectUpload />} />
+              <Route path="/detects/:detectionId" element={<DetectDetail />} />
+            </Route>
           </Route>
-
-          <Route path="/documents" element={<Document />} />
-          <Route path="/documents/:documentId" element={<DocumentDetail />} />
-
-          <Route path="/problems" element={<Problem />} />
-                    <Route path="/problems/:id" element={<ProblemDetail />} />
-        </Route>
 
       </Route>
     </Routes>
