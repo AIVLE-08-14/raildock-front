@@ -155,145 +155,143 @@ function ProblemDetail() {
           ← 목록으로
         </Button>
 
-<Card>
-  <CardHeader className="flex-row items-center justify-between">
-    <CardTitle className="flex items-center gap-3">
-      결함 정보
-      <Badge variant="outline">
-        {SEVERITY_MAP[problem.severity] || problem.severity}
-      </Badge>
-    </CardTitle>
-  </CardHeader>
+        <Card>
+          <CardHeader className="flex-row items-center justify-between">
+            <CardTitle className="flex items-center gap-3">
+              결함 정보
+              <Badge variant="outline">
+                {SEVERITY_MAP[problem.severity] || problem.severity}
+              </Badge>
+            </CardTitle>
+          </CardHeader>
 
-  <CardContent className="space-y-6 text-sm">
-    {/* 기본 정보 */}
-    <div className="grid grid-cols-4 gap-4">
-      <Info label="결함 번호" value={problem.problemNum} />
-      <Info label="결함 ID" value={problem.id} />
-      <Info label="Detection ID" value={problem.detectionId} />
-      <Info label="유형" value={problem.problemType} />
+          <CardContent className="space-y-6 text-sm">
+            {/* 기본 정보 */}
+            <div className="grid grid-cols-4 gap-4">
+              <Info label="결함 번호" value={problem.problemNum} />
+              <Info label="결함 ID" value={problem.id} />
+              <Info label="Detection ID" value={problem.detectionId} />
+              <Info label="유형" value={problem.problemType} />
 
-      <Info
-        label="상태"
-        value={STATUS_MAP[problem.status] || problem.status}
-      />
-      <Info label="노선" value={problem.railType} />
-      <Info
-        label="위치"
-        value={`${problem.latitude}, ${problem.longitude}`}
-      />
-      <Info
-        label="감지 시각"
-        value={new Date(problem.detectedTime).toLocaleString()}
-      />
-    </div>
+              <Info
+                label="상태"
+                value={STATUS_MAP[problem.status] || problem.status}
+              />
+              <Info label="노선" value={problem.railType} />
+              <Info
+                label="위치"
+                value={`${problem.latitude}, ${problem.longitude}`}
+              />
+              <Info
+                label="감지 시각"
+                value={new Date(problem.detectedTime).toLocaleString()}
+              />
+            </div>
 
-    <Separator className='mb-2'/>
+            <Separator className='mb-2'/>
 
-{/* 상태 / 담당자 변경 / 삭제 */}
-<div className="grid grid-cols-3 gap-6">
-  {/* 상태 변경 */}
-  <div className="flex flex-col justify-between">
-    <div className="space-y-1">
-      <div className="text-xs text-muted-foreground">상태 변경</div>
-      <Select
-        value={status}
-        onValueChange={v => {
-          const next = v as ProblemStatus
-          setStatus(next)
-          statusMutation.mutate(next)
-        }}
-      >
-        <SelectTrigger className="w-50">
-          <SelectValue />
-        </SelectTrigger>
-        <SelectContent>
-          {STATUS_OPTIONS.map(s => (
-            <SelectItem key={s} value={s}>
-              {STATUS_MAP[s]}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-    </div>
-  </div>
+            {/* 상태 / 담당자 변경 / 삭제 */}
+            <div className="grid grid-cols-4 gap-6">
+              {/* 상태 변경 */}
+              <div className="flex flex-col justify-between">
+                <div className="space-y-1">
+                  <div className="text-xs text-muted-foreground">상태 변경</div>
+                  <Select
+                    value={status}
+                    onValueChange={v => {
+                      const next = v as ProblemStatus
+                      setStatus(next)
+                      statusMutation.mutate(next)
+                    }}
+                  >
+                    <SelectTrigger className="w-50">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {STATUS_OPTIONS.map(s => (
+                        <SelectItem key={s} value={s}>
+                          {STATUS_MAP[s]}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
 
-  {/* 담당자 */}
-  <div className="flex flex-col justify-between">
-    <div className="space-y-1">
-      <div className="text-xs text-muted-foreground">담당자 ID</div>
-      <div className="flex gap-2">
-        <Input
-          type="number"
-          value={managerId}
-          onChange={e => setManagerId(Number(e.target.value))}
-        />
-        <Button
-          variant="secondary"
-          className="shrink-0"
-          onClick={() => managerMutation.mutate(managerId)}
-        >
-          변경
-        </Button>
-      </div>
-    </div>
-  </div>
+              {/* 담당자 */}
+              <div className="flex flex-col justify-between">
+                <div className="space-y-1">
+                  <div className="text-xs text-muted-foreground">담당자 ID</div>
+                  <div className="flex gap-2">
+                    <Input
+                      type="number"
+                      value={managerId}
+                      onChange={e => setManagerId(Number(e.target.value))}
+                    />
+                    <Button
+                      variant="secondary"
+                      className="shrink-0"
+                      onClick={() => managerMutation.mutate(managerId)}
+                    >
+                      변경
+                    </Button>
+                  </div>
+                </div>
+              </div>
 
-  {/* 삭제 */}
-  <div className="flex flex-col justify-between">
-    <div className="space-y-1">
-      <div className="text-xs text-muted-foreground text-right">결함 삭제</div>
-      <div className="flex justify-end">
-        <Button
-          variant="destructive"
-          size="sm"
-          onClick={() => {
-            if (confirm('정말 삭제하시겠습니까?')) {
-              deleteMutation.mutate(id, {
-                onSuccess: () => navigate('/problems'),
-              })
-            }
-          }}
-        >
-          삭제
-        </Button>
-      </div>
-    </div>
-  </div>
-</div>
+              <div className="flex flex-col justify-between">
+                <div className="space-y-1">
+                <div className="text-xs text-muted-foreground text-right">결함 삭제</div>
+                <div className="flex justify-end gap-2">
+                  <Button
+                    variant={isEditMode ? 'destructive' : 'outline'}
+                    onClick={toggleEditMode}
+                  >
+                    {isEditMode ? '수정 종료' : '오탐 수정'}
+                  </Button>
+                  <Button disabled={!isDirty} onClick={handleSaveBBox}>
+                    저장
+                  </Button>
+                </div>
 
+                </div>
+              </div>
 
-
-
-  </CardContent>
-</Card>
-
+            {/* 삭제 */}
+            <div className="flex flex-col justify-between">
+              <div className="space-y-1">
+                <div className="text-xs text-muted-foreground text-right">결함 삭제</div>
+                <div className="flex justify-end">
+                  <Button
+                    variant="destructive"
+                    size="sm"
+                    onClick={() => {
+                      if (confirm('정말 삭제하시겠습니까?')) {
+                        deleteMutation.mutate(id, {
+                          onSuccess: () => navigate('/problems'),
+                        })
+                      }
+                    }}
+                  >
+                    삭제
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+          </CardContent>
+        </Card>
 
         {/* 이미지 + BBox */}
         <Card>
-          <CardHeader className="flex-row justify-between items-center">
-            <CardTitle>BBox</CardTitle>
-            <div className="flex gap-2">
-              <Button
-                variant={isEditMode ? 'destructive' : 'outline'}
-                onClick={toggleEditMode}
-              >
-                {isEditMode ? '수정 종료' : 'BBox 수정'}
-              </Button>
-              <Button disabled={!isDirty} onClick={handleSaveBBox}>
-                저장
-              </Button>
-            </div>
-          </CardHeader>
-
-          <CardContent className="overflow-auto">
+          <div className="pl-6">
             <BBoxCanvas
               imageUrl={problem.sourceImageIdURL}
               detections={draft}
               editable={isEditMode}
               onDelete={handleDeleteBBox}
-            />
-          </CardContent>
+              />
+          </div>
         </Card>
       </main>
 
