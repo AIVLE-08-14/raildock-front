@@ -22,7 +22,7 @@ https://d254ev2nsrf794.cloudfront.net/
 ### 요구사항
 - Node.js 20+
 - npm 9+
-- 
+
 ### 환경 변수
 프로젝트 루트 디렉토리에 .env 파일 생성
 
